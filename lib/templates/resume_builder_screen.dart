@@ -42,6 +42,9 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
   int _currentQuestionIndex = 0;
   final Map<String, String> _resumeDetails = {};
 
+  // --- ADD THIS VARIABLE ---
+  bool _isConversationComplete = false;
+
   @override
   void initState() {
     super.initState();
@@ -71,6 +74,10 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
           text: 'Great! Your profile is complete. We will start finding the best jobs for you. Thank you.',
           isUser: false,
         ));
+        
+        // --- THIS IS THE CHANGE ---
+        _isConversationComplete = true; // This will show the new button
+        // --- END OF CHANGE ---
       });
       // Now you can save the _resumeDetails map to your database or state manager
       print('Final Job Profile Details: $_resumeDetails');
@@ -81,6 +88,10 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
   }
 
   void _sendMessage() {
+    // --- ADD THIS LINE ---
+    if (_isConversationComplete) return; // Don't do anything if chat is over
+    // --- END OF CHANGE ---
+
     String userInput = _textController.text.trim();
     if (userInput.isEmpty) return;
 
@@ -115,7 +126,7 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
       ),
       body: Column(
         children: [
-          // This Expanded widget will hold the chat messages
+          // 1. Your chat message list
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(16.0),
@@ -125,44 +136,107 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
               )).toList(),
             ),
           ),
-          // This container will hold the text input field
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 1,
-                  blurRadius: 5,
+          
+          // --- THIS IS THE CHANGE ---
+          
+          // 2. Conditionally show the "Generate" button
+          if (_isConversationComplete)
+            _buildGenerateButton(),
+
+          // 3. Conditionally show the text input bar
+          if (!_isConversationComplete)
+            _buildChatInput(),
+            
+          // --- END OF CHANGE ---
+        ],
+      ),
+    );
+  }
+
+  // --- ADD THIS ENTIRE NEW METHOD ---
+  Widget _buildGenerateButton() {
+    return Padding(
+      // Add padding so it's not stuck to the bottom
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+      child: Column(
+        children: [
+          ElevatedButton.icon(
+            icon: Icon(Icons.description_rounded, size: 20),
+            label: Text('Generate Resume (with Typst)'),
+            onPressed: () {
+              // --- This is the dummy action ---
+              // In a real app, this would send your _resumeDetails
+              // map to your backend for Typst processing.
+              
+              print('--- DUMMY DATA FOR TYPST ---');
+              print(_resumeDetails);
+              
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Generating your multilingual resume...'),
                 ),
-              ],
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFF007BFF), // Your app's theme color
+              foregroundColor: Colors.white,
+              minimumSize: Size(double.infinity, 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+              textStyle: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _textController,
-                    decoration: InputDecoration(
-                      hintText: "Type your answer...",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                        borderSide: BorderSide.none,
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey.shade200,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    ),
-                    onSubmitted: (text) => _sendMessage(),
-                  ),
+          ),
+          SizedBox(height: 8),
+          // This adds the text you wanted
+          Text(
+            'Uses Google Translate for multilingual support.',
+            style: TextStyle(color: Colors.grey[600], fontSize: 12),
+          )
+        ],
+      ),
+    );
+  }
+
+  // Helper method to build the chat input field
+  Widget _buildChatInput() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 5,
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _textController,
+              decoration: InputDecoration(
+                hintText: "Type your answer...",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                  borderSide: BorderSide.none,
                 ),
-                const SizedBox(width: 8.0),
-                IconButton(
-                  icon: const Icon(Icons.send, color: Colors.blueAccent),
-                  onPressed: _sendMessage,
-                ),
-              ],
+                filled: true,
+                fillColor: Colors.grey.shade200,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+              ),
+              onSubmitted: (text) => _sendMessage(),
             ),
+          ),
+          const SizedBox(width: 8.0),
+          IconButton(
+            icon: const Icon(Icons.send, color: Colors.blueAccent),
+            onPressed: _sendMessage,
           ),
         ],
       ),

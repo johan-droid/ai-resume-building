@@ -183,58 +183,5 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
     );
   }
 
-  Widget _buildOldTemplateCard(ResumeTemplate template) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ResumeBuilderScreen(
-              template: template,
-              templateName: template.name,
-            ),
-          ),
-        );
-      },
-      child: Card(
-        elevation: 3,
-        shadowColor: Colors.grey.withOpacity(0.3),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        clipBehavior: Clip.antiAlias, // Ensures the image respects the border radius
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: Container(
-                color: Colors.grey.shade200,
-                child: Image.network(
-                  template.imageUrl,
-                  fit: BoxFit.cover,
-                  // Loading and error builders for better UX
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return const Center(child: CircularProgressIndicator());
-                  },
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Icon(Icons.error, color: Colors.red);
-                  },
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                template.name,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+
 }

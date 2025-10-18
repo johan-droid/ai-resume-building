@@ -20,6 +20,22 @@ class LoginScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFEBF4FF),
+      
+      // --- THIS IS THE FIX ---
+      
+      // 1. This tells the blue body to go up behind the app bar
+      extendBodyBehindAppBar: true, 
+      
+      appBar: AppBar(
+        // 2. This makes the app bar itself invisible
+        backgroundColor: Colors.transparent, 
+        elevation: 0, 
+        
+        // 3. This makes the back arrow WHITE and VISIBLE
+        iconTheme: IconThemeData(color: Colors.white), 
+      ),
+      // --- END OF FIX ---
+      
       body: Stack(
         children: [
           // Background icon pattern

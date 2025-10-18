@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rezume_app/screens/auth/login_screen.dart'; // This path is correct as is
 import 'package:rezume_app/profile/help_center_screen.dart'; // Corrected path
+import 'package:rezume_app/profile/edit_profile_screen.dart';
+import 'package:rezume_app/profile/saved_resumes_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -61,23 +63,29 @@ class ProfileScreen extends StatelessWidget {
                   icon: Icons.person_outline_rounded,
                   title: 'Edit Profile',
                   onTap: () {
-                    // Your navigation logic
+                    // --- THIS IS THE CHANGE ---
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const EditProfileScreen(),
+                      ),
+                    );
+                    // --- END OF CHANGE ---
                   },
                 ),
                 _buildProfileOption(
                   icon: Icons.article_outlined,
                   title: 'My Saved Resumes',
                   onTap: () {
-                    // Your navigation logic
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SavedResumesScreen(),
+                      ),
+                    );
                   },
                 ),
-                _buildProfileOption(
-                  icon: Icons.settings_outlined,
-                  title: 'Settings',
-                  onTap: () {
-                    // Your navigation logic
-                  },
-                ),
+
                 _buildProfileOption(
                   icon: Icons.help_outline_rounded,
                   title: 'Help Center',

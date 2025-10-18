@@ -37,13 +37,15 @@ class _UploadResumeScreenState extends State<UploadResumeScreen> {
 
     // Simulate network call to backend for ATS analysis
     Future.delayed(const Duration(seconds: 3), () {
-      setState(() {
-        _isLoading = false;
-      });
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const AtsResultsScreen()),
-      );
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const AtsResultsScreen()),
+        );
+      }
     });
   }
 
