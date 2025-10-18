@@ -3,7 +3,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 // Make sure this import path is correct for your project!
-import 'package:rezume_app/screens/language_selection_screen.dart'; 
+import 'package:rezume_app/screens/language_selection_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,7 +15,6 @@ class SplashScreen extends StatefulWidget {
 // Add 'with SingleTickerProviderStateMixin' for the animation
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-      
   // --- 1. Animation Variables ---
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
@@ -69,14 +68,14 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       // The same dark blue background from your screenshot
-      backgroundColor: const Color(0xFF2c3e50), 
+      backgroundColor: const Color(0xFF2c3e50),
       body: Center(
         // --- 5. Apply the Animations ---
         child: FadeTransition(
           opacity: _fadeAnimation,
           child: ScaleTransition(
             scale: _scaleAnimation,
-            child: Column(
+            child: const Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Your Icon

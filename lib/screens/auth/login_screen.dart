@@ -12,30 +12,38 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // For the background icon pattern
     final List<IconData> backgroundIcons = [
-      Icons.construction, Icons.cleaning_services, Icons.plumbing,
-      Icons.delivery_dining, Icons.engineering, Icons.carpenter,
-      Icons.format_paint, Icons.agriculture, Icons.local_shipping,
-      Icons.handyman, Icons.electrical_services, Icons.build,
+      Icons.construction,
+      Icons.cleaning_services,
+      Icons.plumbing,
+      Icons.delivery_dining,
+      Icons.engineering,
+      Icons.carpenter,
+      Icons.format_paint,
+      Icons.agriculture,
+      Icons.local_shipping,
+      Icons.handyman,
+      Icons.electrical_services,
+      Icons.build,
     ];
 
     return Scaffold(
       backgroundColor: const Color(0xFFEBF4FF),
-      
+
       // --- THIS IS THE FIX ---
-      
+
       // 1. This tells the blue body to go up behind the app bar
-      extendBodyBehindAppBar: true, 
-      
+      extendBodyBehindAppBar: true,
+
       appBar: AppBar(
         // 2. This makes the app bar itself invisible
-        backgroundColor: Colors.transparent, 
-        elevation: 0, 
-        
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+
         // 3. This makes the back arrow WHITE and VISIBLE
-        iconTheme: IconThemeData(color: Colors.white), 
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       // --- END OF FIX ---
-      
+
       body: Stack(
         children: [
           // Background icon pattern
@@ -108,7 +116,8 @@ class LoginScreen extends StatelessWidget {
                           children: [
                             const CustomTextField(labelText: "Phone number:"),
                             const SizedBox(height: 20),
-                            const CustomTextField(labelText: "Password:", isPassword: true),
+                            const CustomTextField(
+                                labelText: "Password:", isPassword: true),
                             const SizedBox(height: 10),
                             Align(
                               alignment: Alignment.centerRight,
@@ -116,12 +125,15 @@ class LoginScreen extends StatelessWidget {
                                 onPressed: () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()),
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ForgotPasswordScreen()),
                                   );
                                 },
                                 style: TextButton.styleFrom(
                                   padding: EdgeInsets.zero,
-                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
                                 ),
                                 child: const Text(
                                   "Forgot password?",
@@ -140,7 +152,9 @@ class LoginScreen extends StatelessWidget {
                                 print("Login button pressed");
                                 Navigator.pushAndRemoveUntil(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const MainScreen()), // Changed this line
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const MainScreen()), // Changed this line
                                   (Route<dynamic> route) => false,
                                 );
                               },
@@ -150,7 +164,7 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  
+
                   // Register button
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -160,7 +174,9 @@ class LoginScreen extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const RegistrationScreen()),
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const RegistrationScreen()),
                           );
                         },
                         child: const Text(

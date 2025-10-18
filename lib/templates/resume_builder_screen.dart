@@ -14,7 +14,7 @@ class ResumeBuilderScreen extends StatefulWidget {
   final String templateName;
 
   const ResumeBuilderScreen({
-    super.key, 
+    super.key,
     required this.template,
     required this.templateName, // <-- Make it required
   });
@@ -27,14 +27,45 @@ class ResumeBuilderScreen extends StatefulWidget {
 class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
   // 3. Defines the entire conversation flow
   final List<Map<String, String>> _questionFlow = [
-    {'key': 'fullName', 'question': 'Welcome! Let\'s build your job profile. What is your full name?'},
-    {'key': 'phone', 'question': 'Got it. What is your 10-digit mobile number?'},
-    {'key': 'city', 'question': 'Which city do you live in? (Example: Mumbai, Rourkela, Delhi)'},
-    {'key': 'jobType', 'question': 'What kind of job are you looking for? (Example: Driver, Electrician, Plumber, Cook, Security Guard)'},
-    {'key': 'experience', 'question': 'How many years of experience do you have in this job? (Type "0" if you are a fresher)'},
-    {'key': 'qualification', 'question': 'What is your highest qualification? (Example: 8th Pass, 10th Pass, 12th Pass, ITI, Diploma)'},
-    {'key': 'skills', 'question': 'What are your main work skills? (Example: Driving, Welding, Tally, Spoken English, Cooking)'},
-    {'key': 'availability', 'question': 'How soon can you join a new job? (Example: Immediately, in 1 week, in 1 month)'},
+    {
+      'key': 'fullName',
+      'question':
+          'Welcome! Let\'s build your job profile. What is your full name?'
+    },
+    {
+      'key': 'phone',
+      'question': 'Got it. What is your 10-digit mobile number?'
+    },
+    {
+      'key': 'city',
+      'question':
+          'Which city do you live in? (Example: Mumbai, Rourkela, Delhi)'
+    },
+    {
+      'key': 'jobType',
+      'question':
+          'What kind of job are you looking for? (Example: Driver, Electrician, Plumber, Cook, Security Guard)'
+    },
+    {
+      'key': 'experience',
+      'question':
+          'How many years of experience do you have in this job? (Type "0" if you are a fresher)'
+    },
+    {
+      'key': 'qualification',
+      'question':
+          'What is your highest qualification? (Example: 8th Pass, 10th Pass, 12th Pass, ITI, Diploma)'
+    },
+    {
+      'key': 'skills',
+      'question':
+          'What are your main work skills? (Example: Driving, Welding, Tally, Spoken English, Cooking)'
+    },
+    {
+      'key': 'availability',
+      'question':
+          'How soon can you join a new job? (Example: Immediately, in 1 week, in 1 month)'
+    },
   ];
 
   final List<ChatMessage> _messages = [];
@@ -71,17 +102,18 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
       // If the conversation is over
       setState(() {
         _messages.add(ChatMessage(
-          text: 'Great! Your profile is complete. We will start finding the best jobs for you. Thank you.',
+          text:
+              'Great! Your profile is complete. We will start finding the best jobs for you. Thank you.',
           isUser: false,
         ));
-        
+
         // --- THIS IS THE CHANGE ---
         _isConversationComplete = true; // This will show the new button
         // --- END OF CHANGE ---
       });
       // Now you can save the _resumeDetails map to your database or state manager
       print('Final Job Profile Details: $_resumeDetails');
-      
+
       // You could navigate away after a delay:
       // Future.delayed(Duration(seconds: 3), () => Navigator.pop(context));
     }
@@ -130,23 +162,23 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(16.0),
-              children: _messages.map((message) => _buildChatMessage(
-                isUser: message.isUser,
-                message: message.text,
-              )).toList(),
+              children: _messages
+                  .map((message) => _buildChatMessage(
+                        isUser: message.isUser,
+                        message: message.text,
+                      ))
+                  .toList(),
             ),
           ),
-          
+
           // --- THIS IS THE CHANGE ---
-          
+
           // 2. Conditionally show the "Generate" button
-          if (_isConversationComplete)
-            _buildGenerateButton(),
+          if (_isConversationComplete) _buildGenerateButton(),
 
           // 3. Conditionally show the text input bar
-          if (!_isConversationComplete)
-            _buildChatInput(),
-            
+          if (!_isConversationComplete) _buildChatInput(),
+
           // --- END OF CHANGE ---
         ],
       ),
@@ -161,36 +193,37 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
       child: Column(
         children: [
           ElevatedButton.icon(
-            icon: Icon(Icons.description_rounded, size: 20),
-            label: Text('Generate Resume (with Typst)'),
+            icon: const Icon(Icons.description_rounded, size: 20),
+            label: const Text('Generate Resume (with Typst)'),
             onPressed: () {
               // --- This is the dummy action ---
               // In a real app, this would send your _resumeDetails
               // map to your backend for Typst processing.
-              
+
               print('--- DUMMY DATA FOR TYPST ---');
               print(_resumeDetails);
-              
+
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                   content: Text('Generating your multilingual resume...'),
                 ),
               );
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF007BFF), // Your app's theme color
+              backgroundColor:
+                  const Color(0xFF007BFF), // Your app's theme color
               foregroundColor: Colors.white,
-              minimumSize: Size(double.infinity, 50),
+              minimumSize: const Size(double.infinity, 50),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30),
               ),
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           // This adds the text you wanted
           Text(
             'Uses Google Translate for multilingual support.',

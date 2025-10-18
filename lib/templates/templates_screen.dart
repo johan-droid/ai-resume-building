@@ -12,12 +12,36 @@ class TemplatesScreen extends StatefulWidget {
 class _TemplatesScreenState extends State<TemplatesScreen> {
   // Dummy data for our templates
   final List<ResumeTemplate> _templates = [
-    ResumeTemplate(id: '1', name: 'Modern', imageUrl: 'https://placehold.co/400x560/EBF4FF/3A506B?text=Modern&font=poppins'),
-    ResumeTemplate(id: '2', name: 'Classic', imageUrl: 'https://placehold.co/400x560/EBF4FF/3A506B?text=Classic&font=poppins'),
-    ResumeTemplate(id: '3', name: 'Creative', imageUrl: 'https://placehold.co/400x560/EBF4FF/3A506B?text=Creative&font=poppins'),
-    ResumeTemplate(id: '4', name: 'Professional', imageUrl: 'https://placehold.co/400x560/EBF4FF/3A506B?text=Pro&font=poppins'),
-    ResumeTemplate(id: '5', name: 'Simple', imageUrl: 'https://placehold.co/400x560/EBF4FF/3A506B?text=Simple&font=poppins'),
-    ResumeTemplate(id: '6', name: 'Technical', imageUrl: 'https://placehold.co/400x560/EBF4FF/3A506B?text=Tech&font=poppins'),
+    ResumeTemplate(
+        id: '1',
+        name: 'Modern',
+        imageUrl:
+            'https://placehold.co/400x560/EBF4FF/3A506B?text=Modern&font=poppins'),
+    ResumeTemplate(
+        id: '2',
+        name: 'Classic',
+        imageUrl:
+            'https://placehold.co/400x560/EBF4FF/3A506B?text=Classic&font=poppins'),
+    ResumeTemplate(
+        id: '3',
+        name: 'Creative',
+        imageUrl:
+            'https://placehold.co/400x560/EBF4FF/3A506B?text=Creative&font=poppins'),
+    ResumeTemplate(
+        id: '4',
+        name: 'Professional',
+        imageUrl:
+            'https://placehold.co/400x560/EBF4FF/3A506B?text=Pro&font=poppins'),
+    ResumeTemplate(
+        id: '5',
+        name: 'Simple',
+        imageUrl:
+            'https://placehold.co/400x560/EBF4FF/3A506B?text=Simple&font=poppins'),
+    ResumeTemplate(
+        id: '6',
+        name: 'Technical',
+        imageUrl:
+            'https://placehold.co/400x560/EBF4FF/3A506B?text=Tech&font=poppins'),
   ];
 
   @override
@@ -32,10 +56,9 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
       body: GridView.count(
         crossAxisCount: 2, // Two columns
         padding: const EdgeInsets.all(16.0),
-        mainAxisSpacing: 16.0,    // Spacing between rows
+        mainAxisSpacing: 16.0, // Spacing between rows
         crossAxisSpacing: 16.0, // Spacing between columns
         children: [
-          
           _buildTemplateCard(
             icon: Icons.article_outlined,
             title: 'Modern',
@@ -51,7 +74,6 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
               );
             },
           ),
-
           _buildTemplateCard(
             icon: Icons.school_outlined,
             title: 'Classic',
@@ -67,7 +89,6 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
               );
             },
           ),
-
           _buildTemplateCard(
             icon: Icons.brush_outlined,
             title: 'Creative',
@@ -83,7 +104,6 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
               );
             },
           ),
-
           _buildTemplateCard(
             icon: Icons.business_center_outlined,
             title: 'Professional',
@@ -99,7 +119,6 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
               );
             },
           ),
-
           _buildTemplateCard(
             icon: Icons.code_outlined,
             title: 'Technical',
@@ -115,7 +134,6 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
               );
             },
           ),
-
           _buildTemplateCard(
             icon: Icons.person_outline,
             title: 'Simple',
@@ -131,7 +149,6 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
               );
             },
           ),
-
         ],
       ),
     );
@@ -144,8 +161,8 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
     required VoidCallback onTap,
   }) {
     // These are the same colors from your profile screen
-    final Color color = Color(0xFF0056b3); // Dark blue
-    final Color bgColor = Color(0xFFf0f8ff); // Light blue
+    const Color color = Color(0xFF0056b3); // Dark blue
+    const Color bgColor = Color(0xFFf0f8ff); // Light blue
 
     return Card(
       elevation: 2.0, // Adds a subtle shadow
@@ -153,7 +170,8 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
-      child: InkWell( // Makes the whole card tappable
+      child: InkWell(
+        // Makes the whole card tappable
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Padding(
@@ -166,11 +184,11 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
                 size: 50, // Large, clear icon
                 color: color,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: color,
@@ -182,6 +200,4 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
       ),
     );
   }
-
-
 }

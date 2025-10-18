@@ -22,32 +22,38 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
     {
       'icon': Icons.trending_up_rounded,
       'title': 'Use Stronger Action Verbs',
-      'subtitle': "In your Experience, change 'responsible for' to a strong verb like 'Managed vehicle upkeep' or 'Oversaw daily safety checks'.",
+      'subtitle':
+          "In your Experience, change 'responsible for' to a strong verb like 'Managed vehicle upkeep' or 'Oversaw daily safety checks'.",
     },
     {
       'icon': Icons.vpn_key_rounded,
       'title': 'Add Job-Specific Keywords',
-      'subtitle': "Your 'Driver' resume is missing keywords like 'Route Planning', 'Fleet Management', or 'Safety Compliance'. Add them to your Skills.",
+      'subtitle':
+          "Your 'Driver' resume is missing keywords like 'Route Planning', 'Fleet Management', or 'Safety Compliance'. Add them to your Skills.",
     },
     {
       'icon': Icons.calculate_rounded,
       'title': 'Quantify Your Impact',
-      'subtitle': "You did great with 'Improved by 15%'. Do it again! For 'Managed all delivery routes', add a number: 'Managed 12 daily routes'.",
+      'subtitle':
+          "You did great with 'Improved by 15%'. Do it again! For 'Managed all delivery routes', add a number: 'Managed 12 daily routes'.",
     },
     {
       'icon': Icons.article_rounded,
       'title': 'Tailor Your Job Title',
-      'subtitle': "Your title is 'Driver', but the (fake) job ad is for 'Logistics Coordinator'. Change your title to match the job you want.",
+      'subtitle':
+          "Your title is 'Driver', but the (fake) job ad is for 'Logistics Coordinator'. Change your title to match the job you want.",
     },
     {
       'icon': Icons.spellcheck_rounded,
       'title': 'Fix Potential Typos',
-      'subtitle': "We found a potential typo: 'vehicle upkeep'. Did you mean 'vehicle maintenance'? Please review your Experience section.",
+      'subtitle':
+          "We found a potential typo: 'vehicle upkeep'. Did you mean 'vehicle maintenance'? Please review your Experience section.",
     },
     {
       'icon': Icons.format_list_bulleted_rounded,
       'title': 'Use Bullet Points',
-      'subtitle': "Your 'Experience' section is a large paragraph. Break it into 3-4 bullet points to make it easier to read quickly.",
+      'subtitle':
+          "Your 'Experience' section is a large paragraph. Break it into 3-4 bullet points to make it easier to read quickly.",
     }
   ];
 
@@ -73,7 +79,8 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
     if (score > 85) {
       message = "This is an excellent score! Just a few minor tweaks.";
     } else if (score > 70) {
-      message = "This is a good score! Here are some suggestions to make it even better.";
+      message =
+          "This is a good score! Here are some suggestions to make it even better.";
     } else {
       message = "There's room for improvement. Let's fix these key areas.";
     }
@@ -103,50 +110,54 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
             children: [
               // --- 1. The Score Card ---
               Card(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
                 color: Colors.blue[50], // Light blue background
                 child: Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Center(
                     child: Column(
                       children: [
-                        Text('YOUR SCORE', style: TextStyle(color: Colors.blue[800])),
-                        SizedBox(height: 8),
+                        Text('YOUR SCORE',
+                            style: TextStyle(color: Colors.blue[800])),
+                        const SizedBox(height: 8),
                         // --- DYNAMIC SCORE ---
                         Text(
                           '$_atsScore%',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 72,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF007BFF),
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         // --- DYNAMIC MESSAGE ---
                         Text(
                           _scoreMessage,
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 16, color: Colors.black54),
+                          style: const TextStyle(
+                              fontSize: 16, color: Colors.black54),
                         ),
                       ],
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
               // --- 2. The Suggestions List ---
-              Text(
+              const Text(
                 'AI Suggestions to Improve',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
 
               // --- DYNAMIC LIST ---
               ListView.builder(
                 itemCount: _suggestions.length,
                 shrinkWrap: true, // Important inside a SingleChildScrollView
-                physics: NeverScrollableScrollPhysics(), // Let the parent scroll
+                physics:
+                    const NeverScrollableScrollPhysics(), // Let the parent scroll
                 itemBuilder: (context, index) {
                   final suggestion = _suggestions[index];
                   // Use your styled card here
@@ -158,7 +169,7 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
                 },
               ),
 
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               // --- 3. The Edit Button ---
               ElevatedButton(
                 onPressed: () {
@@ -168,7 +179,7 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
                     MaterialPageRoute(
                       builder: (context) => ResumeEditorScreen(
                         // Pass the list of suggestions to the new screen
-                        suggestions: _suggestions, 
+                        suggestions: _suggestions,
                       ),
                     ),
                   );
@@ -176,12 +187,12 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green[600],
-                  minimumSize: Size(double.infinity, 50),
+                  minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'Edit My Resume',
                   style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
@@ -206,11 +217,12 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       margin: const EdgeInsets.symmetric(vertical: 6.0),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-        leading: Icon(icon, color: Color(0xFF007BFF), size: 28),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        leading: Icon(icon, color: const Color(0xFF007BFF), size: 28),
         title: Text(
           title,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
         ),
         subtitle: Text(subtitle, style: TextStyle(color: Colors.grey[600])),
       ),

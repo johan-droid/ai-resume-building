@@ -7,7 +7,8 @@ class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({super.key});
 
   @override
-  State<LanguageSelectionScreen> createState() => _LanguageSelectionScreenState();
+  State<LanguageSelectionScreen> createState() =>
+      _LanguageSelectionScreenState();
 }
 
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
@@ -17,8 +18,8 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
     required VoidCallback onTap,
   }) {
     // These are the same colors from your other screens
-    final Color color = Color(0xFF0056b3); // Dark blue text
-    
+    const Color color = Color(0xFF0056b3); // Dark blue text
+
     // --- THIS IS THE CHANGE ---
     final Color bgColor = Colors.blue[50]!; // Was: Color(0xFFf0f8ff)
     // --- END OF CHANGE ---
@@ -30,7 +31,8 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
         style: ElevatedButton.styleFrom(
           backgroundColor: bgColor,
           foregroundColor: color,
-          minimumSize: Size(double.infinity, 54), // Full width, nice height
+          minimumSize:
+              const Size(double.infinity, 54), // Full width, nice height
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -38,7 +40,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
         ),
         child: Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
@@ -69,11 +71,11 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
           padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center, // Center everything
-            crossAxisAlignment: CrossAxisAlignment.stretch, // Make buttons full-width
+            crossAxisAlignment:
+                CrossAxisAlignment.stretch, // Make buttons full-width
             children: [
-
               // --- 1. New Icon ---
-              CircleAvatar(
+              const CircleAvatar(
                 radius: 50,
                 backgroundColor: Color(0xFFf0f8ff), // Light blue
                 child: Icon(
@@ -82,10 +84,10 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                   color: Color(0xFF007BFF), // Primary blue
                 ),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
               // --- 2. New Title ---
-              Text(
+              const Text(
                 'Choose Your Language',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -94,7 +96,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                   color: Colors.black87,
                 ),
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Text(
                 'Please select a language to continue.',
                 textAlign: TextAlign.center,
@@ -103,7 +105,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                   color: Colors.grey[600],
                 ),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
 
               // --- 3. New Language Buttons ---
               _buildLanguageButton(
@@ -127,12 +129,10 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                 },
               ),
               // Bengali (বাংলা) and "Choose your language" buttons are removed.
-
             ],
           ),
         ),
       ),
     );
   }
-
 }

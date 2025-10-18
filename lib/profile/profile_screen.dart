@@ -26,14 +26,14 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 50, // Made the circle a bit larger
-                  backgroundColor: Color(0xFF007BFF).withOpacity(0.1),
-                  child: Text(
+                  backgroundColor: const Color(0xFF007BFF).withOpacity(0.1),
+                  child: const Text(
                     'J',
                     style: TextStyle(fontSize: 48, color: Color(0xFF007BFF)),
                   ),
                 ),
-                SizedBox(height: 16),
-                Text(
+                const SizedBox(height: 16),
+                const Text(
                   'John Doe', // Placeholder Name
                   style: TextStyle(
                     fontSize: 24,
@@ -41,7 +41,7 @@ class ProfileScreen extends StatelessWidget {
                     color: Colors.black87,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   '+91 98765 43210', // Placeholder Phone Number
                   style: TextStyle(
@@ -92,17 +92,19 @@ class ProfileScreen extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HelpCenterScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const HelpCenterScreen()),
                     );
                   },
                 ),
-                SizedBox(height: 20), // Spacer
+                const SizedBox(height: 20), // Spacer
                 _buildProfileOption(
                   icon: Icons.logout_rounded,
                   title: 'Logout',
                   onTap: () {
                     Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => const LoginScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen()),
                       (Route<dynamic> route) => false,
                     );
                   },
@@ -123,9 +125,11 @@ class ProfileScreen extends StatelessWidget {
     required VoidCallback onTap,
     bool isLogout = false, // To make the logout button red
   }) {
-    final Color color = isLogout ? Colors.red.shade700 : Color(0xFF0056b3);
+    final Color color =
+        isLogout ? Colors.red.shade700 : const Color(0xFF0056b3);
     // This light blue background will match your app's theme
-    final Color bgColor = isLogout ? Colors.red.shade50 : Color(0xFFf0f8ff); 
+    final Color bgColor =
+        isLogout ? Colors.red.shade50 : const Color(0xFFf0f8ff);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),

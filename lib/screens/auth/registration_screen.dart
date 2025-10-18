@@ -37,7 +37,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text("REZOOM", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: const Text("REZOOM",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -53,15 +54,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   bottomRight: Radius.circular(50),
                 ),
               ),
-              child: Column(
+              child: const Column(
                 children: [
-                  const Icon(Icons.description, size: 100, color: Colors.white),
-                  const SizedBox(height: 10),
-                  const Text("User Details", style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
+                  Icon(Icons.description, size: 100, color: Colors.white),
+                  SizedBox(height: 10),
+                  Text("User Details",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
-            
+
             // Registration Form
             Padding(
               padding: const EdgeInsets.all(30.0),
@@ -103,16 +108,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                     const SizedBox(height: 20),
                     // 1. "Gender:" Label
-                    Text(
+                    const Text(
                       'Gender:',
                       // Make sure this style matches your other labels (like "Full name:")
                       style: TextStyle(
-                        fontSize: 16, 
-                        fontWeight: FontWeight.w600, 
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                         color: Colors.black54,
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
                     // 2. The Row of new buttons
                     Row(
@@ -144,20 +149,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       ],
                     ),
 
-                    SizedBox(height: 24), // Add spacing before your "SUBMIT" button
+                    const SizedBox(
+                        height: 24), // Add spacing before your "SUBMIT" button
                     CustomButton(
                       text: "SUBMIT",
                       onPressed: () {
                         // Add registration logic here
                         print("Submit button pressed");
                         // Navigate to the first onboarding screen
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(builder: (context) => const UserExperienceScreen()),
-                                (Route<dynamic> route) => false,
-                            );
-
-                        },
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const UserExperienceScreen()),
+                          (Route<dynamic> route) => false,
+                        );
+                      },
                     )
                   ],
                 ),
@@ -178,13 +185,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }) {
     // --- Define your colors ---
     // This is the blue from your "SUBMIT" button
-    final Color selectedColor = Color(0xFF007BFF); 
+    const Color selectedColor = Color(0xFF007BFF);
     // This is the light grey background from your screenshot
-    final Color unselectedBgColor = Colors.grey[200]!; 
+    final Color unselectedBgColor = Colors.grey[200]!;
     // This will be the background color for the selected item
-    final Color selectedBgColor = selectedColor.withOpacity(0.15); 
+    final Color selectedBgColor = selectedColor.withOpacity(0.15);
     // This is the text color for the unselected item
-    final Color unselectedTextColor = Colors.grey[600]!; 
+    final Color unselectedTextColor = Colors.grey[600]!;
 
     return GestureDetector(
       onTap: onTap,
@@ -196,7 +203,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             backgroundColor: isSelected ? selectedBgColor : unselectedBgColor,
             child: Image.asset(
               iconPath,
-              width: 45,  // Adjust the image size as needed
+              width: 45, // Adjust the image size as needed
               height: 45, // Adjust the image size as needed
 
               // --- IMPORTANT ---
@@ -205,7 +212,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               // color: isSelected ? selectedColor : unselectedTextColor,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
 
           // This is the "Male" / "Female" text
           Text(
@@ -220,5 +227,4 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       ),
     );
   }
-
 }

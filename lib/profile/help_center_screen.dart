@@ -16,8 +16,8 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
     required VoidCallback onTap,
   }) {
     // These colors match your app's theme
-    final Color color = Color(0xFF0056b3); // Dark blue
-    final Color bgColor = Colors.blue[50]!;  // Light blue
+    const Color color = Color(0xFF0056b3); // Dark blue
+    final Color bgColor = Colors.blue[50]!; // Light blue
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
@@ -40,7 +40,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
           ),
           title: Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 17,
               color: color,
@@ -71,9 +71,8 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            
             // --- 1. Header Text ---
-            Text(
+            const Text(
               'Contact Us',
               style: TextStyle(
                 fontSize: 26,
@@ -81,7 +80,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
                 color: Colors.black87,
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // --- 2. New Contact Cards ---
             _buildContactCard(
@@ -92,7 +91,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
                 // Add logic to launch the phone dialer
               },
             ),
-            
+
             _buildContactCard(
               icon: Icons.alternate_email_rounded,
               title: 'Support Email',
@@ -110,7 +109,6 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
                 // Add logic to open this in Google Maps
               },
             ),
-
           ],
         ),
       ),

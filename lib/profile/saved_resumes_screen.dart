@@ -26,11 +26,11 @@ class SavedResumesScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('My Saved Resumes'),
+        title: const Text('My Saved Resumes'),
         backgroundColor: Colors.white,
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
-        titleTextStyle: TextStyle(
+        iconTheme: const IconThemeData(color: Colors.black),
+        titleTextStyle: const TextStyle(
           color: Colors.black,
           fontSize: 20,
           fontWeight: FontWeight.w600,
@@ -63,8 +63,8 @@ class SavedResumesScreen extends StatelessWidget {
     required String subtitle,
     required VoidCallback onTap,
   }) {
-    final Color color = Color(0xFF0056b3); // Dark blue
-    final Color bgColor = Colors.blue[50]!;  // Light blue
+    const Color color = Color(0xFF0056b3); // Dark blue
+    final Color bgColor = Colors.blue[50]!; // Light blue
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
@@ -81,14 +81,14 @@ class SavedResumesScreen extends StatelessWidget {
             horizontal: 16,
           ),
           // We use a resume icon for all of them
-          leading: Icon(
+          leading: const Icon(
             Icons.article_rounded,
             color: color,
             size: 28,
           ),
           title: Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 17,
               color: color,
@@ -98,7 +98,7 @@ class SavedResumesScreen extends StatelessWidget {
             subtitle,
             style: TextStyle(color: color.withOpacity(0.7)),
           ),
-          trailing: Icon(
+          trailing: const Icon(
             Icons.arrow_forward_ios_rounded,
             size: 16,
             color: color,

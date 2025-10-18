@@ -11,15 +11,13 @@ class _HomeScreenState extends State<HomeScreen> {
   // This holds the currently selected language. 'English' is the default.
   String _selectedLanguage = 'English';
 
-
-
   // --- ADD THIS MAP for the header ---
   final Map<String, String> _localizedHeader = {
     'English': 'How to Get Started',
     'Hindi': 'कैसे शुरू करें',
     'Odia': 'କିପରି ଆରମ୍ଭ କରିବେ',
   };
-  
+
   // --- ADD THIS MAP for the subtitle ---
   final Map<String, String> _localizedVideoSubtitle = {
     'English': 'Showing tutorial in: English',
@@ -55,19 +53,22 @@ class _HomeScreenState extends State<HomeScreen> {
       {
         'icon': Icons.auto_awesome_rounded,
         'title': 'चरण 2: AI से विवरण भरें',
-        'subtitle': 'विवरण लिखने में सहायता के लिए हमारे AI सहायक का उपयोग करें।',
+        'subtitle':
+            'विवरण लिखने में सहायता के लिए हमारे AI सहायक का उपयोग करें।',
       },
       {
         'icon': Icons.download_for_offline_rounded,
         'title': 'चरण 3: अपना रिज्यूमे डाउनलोड करें',
-        'subtitle': 'अपना पूरा किया गया रिज्यूमे एक PDF के रूप में डाउनलोड करें।',
+        'subtitle':
+            'अपना पूरा किया गया रिज्यूमे एक PDF के रूप में डाउनलोड करें।',
       },
     ],
     'Odia': [
       {
         'icon': Icons.article_rounded,
         'title': 'ପର୍ଯ୍ୟାୟ ୧: ଏକ ଟେମ୍ପ୍ଲେଟ୍ ବାଛନ୍ତୁ',
-        'subtitle': 'ଆପଣଙ୍କ ଶୈଳୀ ସହିତ ମେଳ ଖାଉଥିବା ଏକ ପେଶାଦାର ଟେମ୍ପ୍ଲେଟ୍ ବାଛନ୍ତୁ।',
+        'subtitle':
+            'ଆପଣଙ୍କ ଶୈଳୀ ସହିତ ମେଳ ଖାଉଥିବା ଏକ ପେଶାଦାର ଟେମ୍ପ୍ଲେଟ୍ ବାଛନ୍ତୁ।',
       },
       {
         'icon': Icons.auto_awesome_rounded,
@@ -98,24 +99,23 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              
               // --- 1. Welcome Header (NOW DYNAMIC) ---
               Text(
                 _localizedHeader[_selectedLanguage] ?? 'How to Get Started',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
                   color: Colors.black87,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // --- 2. Language Selector (No change) ---
               Center(
                 child: SegmentedButton<String>(
                   style: SegmentedButton.styleFrom(
                     backgroundColor: Colors.blue[50],
-                    selectedBackgroundColor: Color(0xFF007BFF),
+                    selectedBackgroundColor: const Color(0xFF007BFF),
                     selectedForegroundColor: Colors.white,
                   ),
                   segments: const [
@@ -141,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // --- 3. Video Player Placeholder (No change) ---
               Container(
@@ -163,12 +163,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                 // --- Video Subtitle (NOW DYNAMIC) ---
                 child: Text(
-                  _localizedVideoSubtitle[_selectedLanguage] ?? 'Showing tutorial...',
+                  _localizedVideoSubtitle[_selectedLanguage] ??
+                      'Showing tutorial...',
                   style: TextStyle(color: Colors.grey[600]),
                 ),
               ),
-              
-              SizedBox(height: 24),
+
+              const SizedBox(height: 24),
 
               // --- 4. Features Section (NOW DYNAMIC) ---
               // This dynamically builds the 3 cards
@@ -184,7 +185,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }).toList(),
               ),
-
             ],
           ),
         ),
@@ -200,8 +200,8 @@ class _HomeScreenState extends State<HomeScreen> {
     required VoidCallback onTap,
   }) {
     // These colors match your app's theme
-    final Color color = Color(0xFF0056b3); // Dark blue
-    final Color bgColor = Colors.blue[50]!;  // Light blue
+    const Color color = Color(0xFF0056b3); // Dark blue
+    final Color bgColor = Colors.blue[50]!; // Light blue
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
@@ -224,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           title: Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 17,
               color: color,

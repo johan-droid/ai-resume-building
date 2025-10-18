@@ -32,12 +32,12 @@ class _UserExperienceScreenState extends State<UserExperienceScreen> {
           ),
           leading: Icon(
             icon,
-            color: Color(0xFF007BFF), // Your app's primary blue
+            color: const Color(0xFF007BFF), // Your app's primary blue
             size: 28,
           ),
           title: Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 17,
               color: Colors.black87,
@@ -47,7 +47,7 @@ class _UserExperienceScreenState extends State<UserExperienceScreen> {
             subtitle,
             style: TextStyle(color: Colors.grey[600]),
           ),
-          trailing: Icon(
+          trailing: const Icon(
             Icons.arrow_forward_ios_rounded,
             size: 16,
             color: Colors.grey,
@@ -67,15 +67,15 @@ class _UserExperienceScreenState extends State<UserExperienceScreen> {
         title: const Text(
           'A Quick Question',
           style: TextStyle(
-            color: Colors.black87, 
+            color: Colors.black87,
             fontWeight: FontWeight.w600,
           ),
         ),
         backgroundColor: Colors.white, // Match the body
         elevation: 0, // No shadow
-        
+
         // This automatically adds the black back arrow
-        iconTheme: IconThemeData(color: Colors.black), 
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       // --- END OF CHANGE ---
       // Use this as the 'body' of your user_experience_screen.dart Scaffold
@@ -84,20 +84,20 @@ class _UserExperienceScreenState extends State<UserExperienceScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
 
             // --- Header Section ---
             CircleAvatar(
               radius: 40,
               backgroundColor: Colors.blue[50], // Light blue background
-              child: Icon(
+              child: const Icon(
                 Icons.lightbulb_outline_rounded,
                 size: 44,
                 color: Color(0xFF007BFF), // Your app's primary blue
               ),
             ),
-            SizedBox(height: 24),
-            Text(
+            const SizedBox(height: 24),
+            const Text(
               'Have you created a resume before?',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -106,7 +106,7 @@ class _UserExperienceScreenState extends State<UserExperienceScreen> {
                 color: Colors.black87,
               ),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Text(
               'This helps us personalize your journey.',
               textAlign: TextAlign.center,
@@ -115,7 +115,7 @@ class _UserExperienceScreenState extends State<UserExperienceScreen> {
                 color: Colors.grey[600],
               ),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
 
             // --- Option Buttons ---
             _buildJourneyOption(
@@ -141,9 +141,8 @@ class _UserExperienceScreenState extends State<UserExperienceScreen> {
                 );
               },
             ),
-            
-            // "Upload Existing Resume" option has been removed.
 
+            // "Upload Existing Resume" option has been removed.
           ],
         ),
       ),

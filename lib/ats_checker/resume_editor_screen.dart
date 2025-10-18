@@ -34,7 +34,8 @@ class _ResumeEditorScreenState extends State<ResumeEditorScreen> {
       text: 'Defensive Driving, Vehicle Maintenance, Logistics, GPS Navigation',
     );
     _experienceController = TextEditingController(
-      text: 'Managed all delivery routes for XYZ Logistics. responsible for vehicle upkeep and safety checks. Improved on-time delivery by 15%.',
+      text:
+          'Managed all delivery routes for XYZ Logistics. responsible for vehicle upkeep and safety checks. Improved on-time delivery by 15%.',
     );
   }
 
@@ -52,11 +53,11 @@ class _ResumeEditorScreenState extends State<ResumeEditorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Your Resume'),
+        title: const Text('Edit Your Resume'),
         actions: [
           // A "Save" button
           IconButton(
-            icon: Icon(Icons.save_rounded),
+            icon: const Icon(Icons.save_rounded),
             onPressed: () {
               // TODO: Add logic to save the new text
               // For now, just go back
@@ -71,13 +72,14 @@ class _ResumeEditorScreenState extends State<ResumeEditorScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // --- 1. THE EDITABLE RESUME ---
-            Text(
+            const Text(
               'Your Details (Editable)',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildEditField(controller: _nameController, label: 'Full Name'),
-            _buildEditField(controller: _jobTitleController, label: 'Job Title'),
+            _buildEditField(
+                controller: _jobTitleController, label: 'Job Title'),
             _buildEditField(
               controller: _skillsController,
               label: 'Your Skills',
@@ -88,19 +90,19 @@ class _ResumeEditorScreenState extends State<ResumeEditorScreen> {
               label: 'Your Experience',
               maxLines: 5,
             ),
-            
-            Divider(height: 40, thickness: 1),
+
+            const Divider(height: 40, thickness: 1),
 
             // --- 2. THE AI SUGGESTIONS ---
-            Text(
+            const Text(
               'AI Suggestions to Improve',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             ListView.builder(
               itemCount: widget.suggestions.length,
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 final suggestion = widget.suggestions[index];
                 return _buildSuggestionCard(
@@ -137,7 +139,7 @@ class _ResumeEditorScreenState extends State<ResumeEditorScreen> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Color(0xFF007BFF), width: 2),
+            borderSide: const BorderSide(color: Color(0xFF007BFF), width: 2),
           ),
         ),
       ),
@@ -156,11 +158,12 @@ class _ResumeEditorScreenState extends State<ResumeEditorScreen> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       margin: const EdgeInsets.symmetric(vertical: 6.0),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-        leading: Icon(icon, color: Color(0xFF007BFF), size: 28),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        leading: Icon(icon, color: const Color(0xFF007BFF), size: 28),
         title: Text(
           title,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
         ),
         subtitle: Text(subtitle, style: TextStyle(color: Colors.grey[600])),
       ),

@@ -21,7 +21,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     // Load the (dummy) data into the controllers
     _nameController = TextEditingController(text: 'John Doe');
     _phoneController = TextEditingController(text: '+91 98765 43210');
-    _jobController = TextEditingController(text: 'Driver'); // From our chat flow
+    _jobController =
+        TextEditingController(text: 'Driver'); // From our chat flow
   }
 
   @override
@@ -37,15 +38,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Profile'),
+        title: const Text('Edit Profile'),
         actions: [
           // A "Save" button in the app bar
           IconButton(
-            icon: Icon(Icons.check_rounded),
+            icon: const Icon(Icons.check_rounded),
             tooltip: 'Save',
             onPressed: () {
               // TODO: Add logic to save the new data
-              
+
               // For now, just go back to the profile screen
               Navigator.of(context).pop();
             },
@@ -56,18 +57,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             // Avatar to match the profile screen
             CircleAvatar(
               radius: 50,
               backgroundColor: Colors.blue[50],
-              child: Text(
+              child: const Text(
                 'J', // Placeholder initial
                 style: TextStyle(fontSize: 48, color: Color(0xFF007BFF)),
               ),
             ),
-            SizedBox(height: 30),
-            
+            const SizedBox(height: 30),
+
             // Re-using our helper widget for clean text fields
             _buildEditField(
               controller: _nameController,
@@ -111,7 +112,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Color(0xFF007BFF), width: 2),
+            borderSide: const BorderSide(color: Color(0xFF007BFF), width: 2),
           ),
         ),
       ),
