@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rezume_app/main.dart';
 import 'package:rezume_app/screens/auth/registration_screen.dart';
+import 'package:rezume_app/screens/auth/forgot_password_screen.dart';
 import 'package:rezume_app/widgets/custom_button.dart';
 import 'package:rezume_app/widgets/custom_textfield.dart';
 
@@ -22,18 +23,20 @@ class LoginScreen extends StatelessWidget {
       body: Stack(
         children: [
           // Background icon pattern
-          GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 5,
-              childAspectRatio: 1.0,
+          IgnorePointer(
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 5,
+                childAspectRatio: 1.0,
+              ),
+              itemCount: 100, // Just a large number to fill the screen
+              itemBuilder: (context, index) {
+                return Icon(
+                  backgroundIcons[index % backgroundIcons.length],
+                  color: Colors.blue.withOpacity(0.08),
+                );
+              },
             ),
-            itemCount: 100, // Just a large number to fill the screen
-            itemBuilder: (context, index) {
-              return Icon(
-                backgroundIcons[index % backgroundIcons.length],
-                color: Colors.blue.withOpacity(0.08),
-              );
-            },
           ),
           // Main UI
           SafeArea(
@@ -94,8 +97,23 @@ class LoginScreen extends StatelessWidget {
                             Align(
                               alignment: Alignment.centerRight,
                               child: TextButton(
-                                onPressed: () {},
-                                child: const Text("Forgot password?"),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()),
+                                  );
+                                },
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                ),
+                                child: const Text(
+                                  "Forgot password?",
+                                  style: TextStyle(
+                                    color: Color(0xFF007BFF),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ),
                             ),
                             const SizedBox(height: 20),
@@ -106,7 +124,7 @@ class LoginScreen extends StatelessWidget {
                                 print("Login button pressed");
                                 Navigator.pushAndRemoveUntil(
                                   context,
-                                  MaterialPageRoute(builder: (context) => MainScreen()), // Changed this line
+                                  MaterialPageRoute(builder: (context) => const MainScreen()), // Changed this line
                                   (Route<dynamic> route) => false,
                                 );
                               },

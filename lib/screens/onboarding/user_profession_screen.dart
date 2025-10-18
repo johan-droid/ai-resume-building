@@ -63,7 +63,7 @@ class UserProfessionScreen extends StatelessWidget {
         // Navigate to the main screen with bottom navigation
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => MainScreen()), // Changed this line
+            MaterialPageRoute(builder: (context) => const MainScreen()), // Changed this line
             (Route<dynamic> route) => false,
           );
       },

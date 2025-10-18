@@ -1,16 +1,115 @@
 import 'package:flutter/material.dart';
 import 'package:rezume_app/models/resume_template_model.dart';
 
-class ResumeBuilderScreen extends StatelessWidget {
-  final ResumeTemplate template;
+class ChatMessage {
+  final String text;
+  final bool isUser;
 
-  const ResumeBuilderScreen({Key? key, required this.template}) : super(key: key);
+  ChatMessage({required this.text, required this.isUser});
+}
+
+class ResumeBuilderScreen extends StatefulWidget {
+  final ResumeTemplate template;
+  // --- ADD THIS ---
+  final String templateName;
+
+  const ResumeBuilderScreen({
+    super.key, 
+    required this.template,
+    required this.templateName, // <-- Make it required
+  });
+  // --- END OF CHANGE ---
+
+  @override
+  State<ResumeBuilderScreen> createState() => _ResumeBuilderScreenState();
+}
+
+class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
+  // 3. Defines the entire conversation flow
+  final List<Map<String, String>> _questionFlow = [
+    {'key': 'fullName', 'question': 'Welcome! Let\'s build your job profile. What is your full name?'},
+    {'key': 'phone', 'question': 'Got it. What is your 10-digit mobile number?'},
+    {'key': 'city', 'question': 'Which city do you live in? (Example: Mumbai, Rourkela, Delhi)'},
+    {'key': 'jobType', 'question': 'What kind of job are you looking for? (Example: Driver, Electrician, Plumber, Cook, Security Guard)'},
+    {'key': 'experience', 'question': 'How many years of experience do you have in this job? (Type "0" if you are a fresher)'},
+    {'key': 'qualification', 'question': 'What is your highest qualification? (Example: 8th Pass, 10th Pass, 12th Pass, ITI, Diploma)'},
+    {'key': 'skills', 'question': 'What are your main work skills? (Example: Driving, Welding, Tally, Spoken English, Cooking)'},
+    {'key': 'availability', 'question': 'How soon can you join a new job? (Example: Immediately, in 1 week, in 1 month)'},
+  ];
+
+  final List<ChatMessage> _messages = [];
+  final TextEditingController _textController = TextEditingController();
+  int _currentQuestionIndex = 0;
+  final Map<String, String> _resumeDetails = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _askQuestion();
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
+  // This function adds the next bot question to the chat
+  void _askQuestion() {
+    if (_currentQuestionIndex < _questionFlow.length) {
+      // If there are more questions, add the next one
+      setState(() {
+        _messages.add(ChatMessage(
+          text: _questionFlow[_currentQuestionIndex]['question']!,
+          isUser: false,
+        ));
+      });
+    } else {
+      // If the conversation is over
+      setState(() {
+        _messages.add(ChatMessage(
+          text: 'Great! Your profile is complete. We will start finding the best jobs for you. Thank you.',
+          isUser: false,
+        ));
+      });
+      // Now you can save the _resumeDetails map to your database or state manager
+      print('Final Job Profile Details: $_resumeDetails');
+      
+      // You could navigate away after a delay:
+      // Future.delayed(Duration(seconds: 3), () => Navigator.pop(context));
+    }
+  }
+
+  void _sendMessage() {
+    String userInput = _textController.text.trim();
+    if (userInput.isEmpty) return;
+
+    // Add user message to chat
+    setState(() {
+      _messages.add(ChatMessage(text: userInput, isUser: true));
+    });
+
+    // Store the answer
+    if (_currentQuestionIndex < _questionFlow.length) {
+      String key = _questionFlow[_currentQuestionIndex]['key']!;
+      _resumeDetails[key] = userInput;
+      _currentQuestionIndex++;
+    }
+
+    // Clear the text field
+    _textController.clear();
+
+    // Ask the next question after a short delay
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _askQuestion();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Building with '${template.name}'"),
+        title: Text("Building with '${widget.templateName}'"),
         backgroundColor: Colors.white,
         elevation: 1,
       ),
@@ -20,13 +119,10 @@ class ResumeBuilderScreen extends StatelessWidget {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(16.0),
-              children: [
-                // Example of a message from the AI assistant
-                _buildChatMessage(
-                  isUser: false,
-                  message: "Great choice! Let's start with your personal details. What is your full name?",
-                ),
-              ],
+              children: _messages.map((message) => _buildChatMessage(
+                isUser: message.isUser,
+                message: message.text,
+              )).toList(),
             ),
           ),
           // This container will hold the text input field
@@ -46,6 +142,7 @@ class ResumeBuilderScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextField(
+                    controller: _textController,
                     decoration: InputDecoration(
                       hintText: "Type your answer...",
                       border: OutlineInputBorder(
@@ -56,14 +153,13 @@ class ResumeBuilderScreen extends StatelessWidget {
                       fillColor: Colors.grey.shade200,
                       contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
                     ),
+                    onSubmitted: (text) => _sendMessage(),
                   ),
                 ),
                 const SizedBox(width: 8.0),
                 IconButton(
                   icon: const Icon(Icons.send, color: Colors.blueAccent),
-                  onPressed: () {
-                    // Logic to send the message
-                  },
+                  onPressed: _sendMessage,
                 ),
               ],
             ),

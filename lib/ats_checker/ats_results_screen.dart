@@ -20,16 +20,16 @@ class AtsResultsScreen extends StatelessWidget {
             Card(
               elevation: 4,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
+              child: const Padding(
+                padding: EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                    const Text("YOUR SCORE", style: TextStyle(fontSize: 16, color: Colors.grey)),
-                    const SizedBox(height: 10),
+                    Text("YOUR SCORE", style: TextStyle(fontSize: 16, color: Colors.grey)),
+                    SizedBox(height: 10),
                     // Dummy score display
-                    const Text("78%", style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold, color: Colors.blueAccent)),
-                    const SizedBox(height: 10),
-                    const Text(
+                    Text("78%", style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold, color: Colors.blueAccent)),
+                    SizedBox(height: 10),
+                    Text(
                       "This is a good score! Here are some suggestions from our AI to make it even better.",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 16),

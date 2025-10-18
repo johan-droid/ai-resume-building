@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
       const Duration(seconds: 3),
       () => Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => LanguageSelectionScreen()),
+        MaterialPageRoute(builder: (context) => const LanguageSelectionScreen()),
       ),
     );
   }
@@ -30,8 +30,8 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Assuming you have a logo in assets/images/logo.png
-            Image.asset('assets/images/logo.png', width: 150),
+            // Using icon instead of image for now
+            const Icon(Icons.description, size: 150, color: Colors.white),
             const SizedBox(height: 20),
             const Text(
               'REZOOM',

@@ -3,12 +3,18 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatelessWidget {
   final String labelText;
   final bool isPassword;
+  final TextEditingController? controller;
+  final String? Function(String?)? validator;
+  final bool readOnly;
 
   const CustomTextField({
-    Key? key,
+    super.key,
     required this.labelText,
     this.isPassword = false,
-  }) : super(key: key);
+    this.controller,
+    this.validator,
+    this.readOnly = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +30,11 @@ class CustomTextField extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         TextFormField(
+          controller: controller,
+          validator: validator,
           obscureText: isPassword,
+          readOnly: readOnly,
+          keyboardType: labelText.toLowerCase().contains('phone') ? TextInputType.phone : TextInputType.text,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
             filled: true,

@@ -1,18 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rezume_app/app/localization/app_localizations.dart';
 import 'package:rezume_app/providers/locale_provider.dart';
 import 'package:rezume_app/screens/auth/login_screen.dart';
 
-class LanguageSelectionScreen extends StatelessWidget {
+class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({super.key});
+
+  @override
+  State<LanguageSelectionScreen> createState() => _LanguageSelectionScreenState();
+}
+
+class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
+  // Helper method for building the new language buttons
+  Widget _buildLanguageButton({
+    required String text,
+    required VoidCallback onTap,
+  }) {
+    // These are the same colors from your other screens
+    final Color color = Color(0xFF0056b3); // Dark blue text
+    
+    // --- THIS IS THE CHANGE ---
+    final Color bgColor = Colors.blue[50]!; // Was: Color(0xFFf0f8ff)
+    // --- END OF CHANGE ---
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: ElevatedButton(
+        onPressed: onTap,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: bgColor,
+          foregroundColor: color,
+          minimumSize: Size(double.infinity, 54), // Full width, nice height
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 2.0, // Subtle shadow
+        ),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
 
   void _selectLanguage(BuildContext context, String languageCode) {
     // Update the locale using the provider
     final provider = Provider.of<LocaleProvider>(context, listen: false);
     provider.setLocale(Locale(languageCode));
 
-    // **FIX 1: Use push instead of pushReplacement to allow going back**
+    // Navigate to login screen
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -21,76 +61,78 @@ class LanguageSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Helper function for easier translation access
-    String t(String key) {
-      return AppLocalizations.of(context)!.translate(key);
-    }
-
     return Scaffold(
-      backgroundColor: const Color(0xFF3A506B),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF3A506B), Color(0xFF0B132B)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: SafeArea(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset('assets/images/logo.png', width: 120),
-                const SizedBox(height: 20),
-                // **FIX 2: Use translated strings instead of hardcoded text**
-                Text(
-                  t('create_cv_title'),
-                  style: const TextStyle(color: Colors.white70, fontSize: 18),
-                  textAlign: TextAlign.center,
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center, // Center everything
+            crossAxisAlignment: CrossAxisAlignment.stretch, // Make buttons full-width
+            children: [
+
+              // --- 1. New Icon ---
+              CircleAvatar(
+                radius: 50,
+                backgroundColor: Color(0xFFf0f8ff), // Light blue
+                child: Icon(
+                  Icons.translate_rounded, // A more appropriate icon
+                  size: 60,
+                  color: Color(0xFF007BFF), // Primary blue
                 ),
-                const SizedBox(height: 5),
-                Text(
-                  t('generate_cv_subtitle'),
-                  style: const TextStyle(color: Colors.white70, fontSize: 16),
-                   textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 24),
+
+              // --- 2. New Title ---
+              Text(
+                'Choose Your Language',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
                 ),
-                const SizedBox(height: 50),
-                _languageButton(context, 'English', 'en'),
-                const SizedBox(height: 20),
-                _languageButton(context, 'हिंदी', 'hi'), // Hindi
-                const SizedBox(height: 20),
-                _languageButton(context, 'বাংলা', 'bn'), // Bengali
-                const SizedBox(height: 20),
-                // You can translate this button's text as well
-                _languageButton(context, t('choose_language'), 'en'),
-              ],
-            ),
+              ),
+              SizedBox(height: 12),
+              Text(
+                'Please select a language to continue.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey[600],
+                ),
+              ),
+              SizedBox(height: 40),
+
+              // --- 3. New Language Buttons ---
+              _buildLanguageButton(
+                text: 'English',
+                onTap: () {
+                  _selectLanguage(context, 'en');
+                },
+              ),
+
+              _buildLanguageButton(
+                text: 'हिंदी', // Hindi
+                onTap: () {
+                  _selectLanguage(context, 'hi');
+                },
+              ),
+
+              _buildLanguageButton(
+                text: 'ଓଡ଼ିଆ', // Odia
+                onTap: () {
+                  _selectLanguage(context, 'or');
+                },
+              ),
+              // Bengali (বাংলা) and "Choose your language" buttons are removed.
+
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _languageButton(
-      BuildContext context, String text, String languageCode) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.7,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF1C2541),
-          padding: const EdgeInsets.symmetric(vertical: 15),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-            side: const BorderSide(color: Colors.blueAccent),
-          ),
-        ),
-        onPressed: () => _selectLanguage(context, languageCode),
-        child: Text(
-          text,
-          style: const TextStyle(fontSize: 18, color: Colors.white),
-        ),
-      ),
-    );
-  }
 }

@@ -29,32 +29,170 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
         backgroundColor: Colors.white,
         elevation: 1,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // 2 templates per row
-            crossAxisSpacing: 12.0,
-            mainAxisSpacing: 12.0,
-            childAspectRatio: 0.7, // Adjust for template shape
+      body: GridView.count(
+        crossAxisCount: 2, // Two columns
+        padding: const EdgeInsets.all(16.0),
+        mainAxisSpacing: 16.0,    // Spacing between rows
+        crossAxisSpacing: 16.0, // Spacing between columns
+        children: [
+          
+          _buildTemplateCard(
+            icon: Icons.article_outlined,
+            title: 'Modern',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ResumeBuilderScreen(
+                    template: _templates[0],
+                    templateName: 'Modern',
+                  ),
+                ),
+              );
+            },
           ),
-          itemCount: _templates.length,
-          itemBuilder: (context, index) {
-            final template = _templates[index];
-            return _buildTemplateCard(template);
-          },
+
+          _buildTemplateCard(
+            icon: Icons.school_outlined,
+            title: 'Classic',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ResumeBuilderScreen(
+                    template: _templates[1],
+                    templateName: 'Classic',
+                  ),
+                ),
+              );
+            },
+          ),
+
+          _buildTemplateCard(
+            icon: Icons.brush_outlined,
+            title: 'Creative',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ResumeBuilderScreen(
+                    template: _templates[2],
+                    templateName: 'Creative',
+                  ),
+                ),
+              );
+            },
+          ),
+
+          _buildTemplateCard(
+            icon: Icons.business_center_outlined,
+            title: 'Professional',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ResumeBuilderScreen(
+                    template: _templates[3],
+                    templateName: 'Professional',
+                  ),
+                ),
+              );
+            },
+          ),
+
+          _buildTemplateCard(
+            icon: Icons.code_outlined,
+            title: 'Technical',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ResumeBuilderScreen(
+                    template: _templates[5],
+                    templateName: 'Technical',
+                  ),
+                ),
+              );
+            },
+          ),
+
+          _buildTemplateCard(
+            icon: Icons.person_outline,
+            title: 'Simple',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ResumeBuilderScreen(
+                    template: _templates[4],
+                    templateName: 'Simple',
+                  ),
+                ),
+              );
+            },
+          ),
+
+        ],
+      ),
+    );
+  }
+
+  // Helper method for building the new template cards
+  Widget _buildTemplateCard({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    // These are the same colors from your profile screen
+    final Color color = Color(0xFF0056b3); // Dark blue
+    final Color bgColor = Color(0xFFf0f8ff); // Light blue
+
+    return Card(
+      elevation: 2.0, // Adds a subtle shadow
+      color: bgColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: InkWell( // Makes the whole card tappable
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 50, // Large, clear icon
+                color: color,
+              ),
+              SizedBox(height: 16),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: color,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildTemplateCard(ResumeTemplate template) {
+  Widget _buildOldTemplateCard(ResumeTemplate template) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ResumeBuilderScreen(template: template),
+            builder: (context) => ResumeBuilderScreen(
+              template: template,
+              templateName: template.name,
+            ),
           ),
         );
       },

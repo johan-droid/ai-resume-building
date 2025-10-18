@@ -11,7 +11,20 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  String? _selectedGender; // To track selected gender
+  final _nameController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  String _selectedGender = ''; // To track selected gender
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _phoneController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +55,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               child: Column(
                 children: [
-                  Image.asset('assets/images/logo.png', width: 100), // Ensure you have this logo
+                  const Icon(Icons.description, size: 100, color: Colors.white),
                   const SizedBox(height: 10),
                   const Text("User Details", style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
                 ],
@@ -60,46 +73,78 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
                 child: Column(
                   children: [
-                    const CustomTextField(labelText: "Full name:"),
+                    CustomTextField(
+                      labelText: "Full name:",
+                      controller: _nameController,
+                    ),
                     const SizedBox(height: 20),
-                    const CustomTextField(labelText: "Phone number:"),
+                    CustomTextField(
+                      labelText: "Phone number:",
+                      controller: _phoneController,
+                    ),
+
                     const SizedBox(height: 20),
-                    // State Dropdown (example)
-                    DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        labelText: 'State:',
-                        contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
-                      ),
-                      items: <String>['Odisha', 'West Bengal', 'Maharashtra', 'Delhi']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        // Handle state selection
+                    CustomTextField(
+                      labelText: "Set Password:",
+                      controller: _passwordController,
+                      isPassword: true,
+                    ),
+                    const SizedBox(height: 20),
+                    CustomTextField(
+                      labelText: "Confirm Password:",
+                      controller: _confirmPasswordController,
+                      isPassword: true,
+                      validator: (value) {
+                        if (value != _passwordController.text) {
+                          return 'Passwords do not match';
+                        }
+                        return null;
                       },
-                      hint: const Text('Select State'),
                     ),
                     const SizedBox(height: 20),
-                    const CustomTextField(labelText: "Set Password:", isPassword: true),
-                    const SizedBox(height: 20),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text("Gender:", style: TextStyle(color: Color(0xFF3A506B), fontWeight: FontWeight.w600)),
+                    // 1. "Gender:" Label
+                    Text(
+                      'Gender:',
+                      // Make sure this style matches your other labels (like "Full name:")
+                      style: TextStyle(
+                        fontSize: 16, 
+                        fontWeight: FontWeight.w600, 
+                        color: Colors.black54,
+                      ),
                     ),
-                    const SizedBox(height: 10),
-                    // Gender Selection
+                    SizedBox(height: 16),
+
+                    // 2. The Row of new buttons
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _genderSelector('male', Icons.male, "Male"),
-                        _genderSelector('female', Icons.female, "Female"),
+                        // --- Male Button ---
+                        _buildGenderOption(
+                          iconPath: 'assets/images/male_avatar.png',
+                          label: 'Male',
+                          isSelected: _selectedGender == 'Male',
+                          onTap: () {
+                            setState(() {
+                              _selectedGender = 'Male';
+                            });
+                          },
+                        ),
+
+                        // --- Female Button ---
+                        _buildGenderOption(
+                          iconPath: 'assets/images/female_avatar.png',
+                          label: 'Female',
+                          isSelected: _selectedGender == 'Female',
+                          onTap: () {
+                            setState(() {
+                              _selectedGender = 'Female';
+                            });
+                          },
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 30),
+
+                    SizedBox(height: 24), // Add spacing before your "SUBMIT" button
                     CustomButton(
                       text: "SUBMIT",
                       onPressed: () {
@@ -108,7 +153,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         // Navigate to the first onboarding screen
                             Navigator.pushAndRemoveUntil(
                                 context,
-                                MaterialPageRoute(builder: (context) => UserExperienceScreen()),
+                                MaterialPageRoute(builder: (context) => const UserExperienceScreen()),
                                 (Route<dynamic> route) => false,
                             );
 
@@ -124,25 +169,56 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  Widget _genderSelector(String gender, IconData icon, String label) {
-    bool isSelected = _selectedGender == gender;
+  // ADD THIS ENTIRE HELPER METHOD
+  Widget _buildGenderOption({
+    required String iconPath,
+    required String label,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    // --- Define your colors ---
+    // This is the blue from your "SUBMIT" button
+    final Color selectedColor = Color(0xFF007BFF); 
+    // This is the light grey background from your screenshot
+    final Color unselectedBgColor = Colors.grey[200]!; 
+    // This will be the background color for the selected item
+    final Color selectedBgColor = selectedColor.withOpacity(0.15); 
+    // This is the text color for the unselected item
+    final Color unselectedTextColor = Colors.grey[600]!; 
+
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedGender = gender;
-        });
-      },
+      onTap: onTap,
       child: Column(
         children: [
+          // This is the circular background
           CircleAvatar(
-            radius: 40,
-            backgroundColor: isSelected ? Colors.blueAccent : Colors.grey.shade300,
-            child: Icon(icon, size: 40, color: isSelected ? Colors.white : Colors.grey.shade700),
+            radius: 40, // Sets the circle size (80px diameter)
+            backgroundColor: isSelected ? selectedBgColor : unselectedBgColor,
+            child: Image.asset(
+              iconPath,
+              width: 45,  // Adjust the image size as needed
+              height: 45, // Adjust the image size as needed
+
+              // --- IMPORTANT ---
+              // If your images are single-color (like black), you can tint them.
+              // If they are multi-color (like a real avatar), KEEP THIS LINE COMMENTED OUT.
+              // color: isSelected ? selectedColor : unselectedTextColor,
+            ),
           ),
-          const SizedBox(height: 8),
-          Text(label, style: TextStyle(color: isSelected ? Colors.blueAccent : Colors.black, fontWeight: isSelected ? FontWeight.bold : FontWeight.normal)),
+          SizedBox(height: 8),
+
+          // This is the "Male" / "Female" text
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              color: isSelected ? selectedColor : unselectedTextColor,
+            ),
+          )
         ],
       ),
     );
   }
+
 }
