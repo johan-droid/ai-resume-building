@@ -5,8 +5,48 @@ import 'package:rezume_app/screens/auth/forgot_password_screen.dart';
 import 'package:rezume_app/widgets/custom_button.dart';
 import 'package:rezume_app/widgets/custom_textfield.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  // --- 1. Add a Form Key and Controllers ---
+  final _formKey = GlobalKey<FormState>();
+  final _phoneController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _phoneController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  // --- 2. Create the Login Logic ---
+  void _login() {
+    // This checks if the form is valid (i.e., fields are not empty)
+    if (_formKey.currentState!.validate()) {
+      // --- DUMMY AUTHENTICATION ---
+      // In a real app, you'd check this against your backend.
+      // For now, any 10-digit number and any 6+ char password will work.
+      print('Login successful!');
+      
+      // Navigate to the main screen
+      Navigator.pushReplacement(
+        context,
+        // IMPORTANT: Use your main screen with the bottom nav bar here
+        MaterialPageRoute(builder: (context) => const MainScreen()), 
+      );
+    } else {
+      // If the form is not valid, show a snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,54 +152,78 @@ class LoginScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        child: Column(
-                          children: [
-                            const CustomTextField(labelText: "Phone number:"),
-                            const SizedBox(height: 20),
-                            const CustomTextField(
-                                labelText: "Password:", isPassword: true),
-                            const SizedBox(height: 10),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ForgotPasswordScreen()),
-                                  );
-                                },
-                                style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero,
-                                  tapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
+                        // --- 3. Wrap your form fields in a Form widget ---
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              // Phone Number Field
+                              TextFormField(
+                                controller: _phoneController,
+                                decoration: const InputDecoration(
+                                  labelText: 'Phone number',
+                                  border: OutlineInputBorder(),
                                 ),
-                                child: const Text(
-                                  "Forgot password?",
-                                  style: TextStyle(
-                                    color: Color(0xFF007BFF),
-                                    fontWeight: FontWeight.w600,
+                                keyboardType: TextInputType.phone,
+                                validator: (value) {
+                                  if (value == null || value.trim().length < 10) {
+                                    return 'Please enter a valid 10-digit number';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 16),
+
+                              // Password Field
+                              TextFormField(
+                                controller: _passwordController,
+                                decoration: const InputDecoration(
+                                  labelText: 'Password',
+                                  border: OutlineInputBorder(),
+                                ),
+                                obscureText: true,
+                                validator: (value) {
+                                  if (value == null || value.trim().length < 6) {
+                                    return 'Password must be at least 6 characters';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 10),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ForgotPasswordScreen()),
+                                    );
+                                  },
+                                  style: TextButton.styleFrom(
+                                    padding: EdgeInsets.zero,
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                  ),
+                                  child: const Text(
+                                    "Forgot password?",
+                                    style: TextStyle(
+                                      color: Color(0xFF007BFF),
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 20),
-                            CustomButton(
-                              text: "LOGIN",
-                              onPressed: () {
-                                // Add login logic here
-                                print("Login button pressed");
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const MainScreen()), // Changed this line
-                                  (Route<dynamic> route) => false,
-                                );
-                              },
-                            ),
-                          ],
+                              const SizedBox(height: 20),
+                              
+                              // LOGIN Button - now calls _login()
+                              CustomButton(
+                                text: "LOGIN",
+                                onPressed: _login, // <-- Use the new function
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

@@ -1,6 +1,7 @@
+// lib/screens/auth/forgot_password_screen.dart
+
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:rezume_app/widgets/custom_button.dart';
-import 'package:rezume_app/widgets/custom_textfield.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -11,158 +12,240 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _phoneController = TextEditingController();
+  final _otpController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  // --- 1. State Variables for OTP flow ---
+  bool _isOtpSent = false;
+  Timer? _timer;
+  int _start = 120; // 2 minutes in seconds
+  bool _canResend = false;
 
   @override
   void dispose() {
     _phoneController.dispose();
+    _otpController.dispose();
+    _timer?.cancel();
     super.dispose();
   }
+  
+  // --- 2. Timer Logic ---
+  void _startTimer() {
+    _canResend = false;
+    _start = 120;
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_start == 0) {
+        setState(() {
+          _canResend = true;
+          timer.cancel();
+        });
+      } else {
+        setState(() {
+          _start--;
+        });
+      }
+    });
+  }
 
-  void _sendResetCode() {
+  // --- 3. "Send Code" Logic ---
+  void _sendCode() {
     if (_formKey.currentState!.validate()) {
-      print('Sending reset code to: ${_phoneController.text}');
-      
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Verification code sent!')),
-      );
-      
-      Navigator.of(context).pop();
+      print('Sending OTP to ${_phoneController.text}');
+      setState(() {
+        _isOtpSent = true;
+      });
+      _startTimer();
     }
+  }
+
+  // --- 4. "Verify OTP" Logic ---
+  void _verifyOtp() {
+    if (_otpController.text.length == 6) {
+      _timer?.cancel();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('OTP Verified! (Demo)')),
+      );
+      Navigator.of(context).pop();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid OTP')),
+      );
+    }
+  }
+
+  // --- 5. "Change Number" Logic ---
+  void _changeNumber() {
+    _timer?.cancel();
+    setState(() {
+      _isOtpSent = false;
+      _canResend = false;
+      _otpController.clear();
+    });
+  }
+
+  String get _timerText {
+    int minutes = _start ~/ 60;
+    int seconds = _start % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<IconData> backgroundIcons = [
-      Icons.construction, Icons.cleaning_services, Icons.plumbing,
-      Icons.delivery_dining, Icons.engineering, Icons.carpenter,
-      Icons.format_paint, Icons.agriculture, Icons.local_shipping,
-      Icons.handyman, Icons.electrical_services, Icons.build,
-    ];
-
+    // This uses the same UI structure as your Login screen
     return Scaffold(
-      backgroundColor: const Color(0xFFEBF4FF),
-      body: Stack(
-        children: [
-          // Background icon pattern
-          IgnorePointer(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 5,
-                childAspectRatio: 1.0,
+      extendBodyBehindAppBar: true, // Lets the body go behind the app bar
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // --- 1. Blue Header ---
+            Container(
+              width: double.infinity,
+              height: 300, // Adjust as needed
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              decoration: BoxDecoration(
+                color: Color(0xFF007BFF), // Your app's main blue
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                ),
               ),
-              itemCount: 100,
-              itemBuilder: (context, index) {
-                return Icon(
-                  backgroundIcons[index % backgroundIcons.length],
-                  color: Colors.blue.withOpacity(0.08),
-                );
-              },
-            ),
-          ),
-          // Main UI
-          SafeArea(
-            child: SingleChildScrollView(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Upper blue curved part
-                  Container(
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.35,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF007BFF),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(80),
-                      ),
-                    ),
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          top: 20,
-                          left: 10,
-                          child: IconButton(
-                            icon: const Icon(Icons.arrow_back, color: Colors.white, size: 28),
-                            onPressed: () => Navigator.of(context).pop(),
-                          ),
-                        ),
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 30.0, bottom: 40.0),
-                            child: Text(
-                              "Reset\nPassword",
-                              style: TextStyle(
-                                fontSize: 40,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                height: 1.2,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Form Card
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                    child: Transform.translate(
-                      offset: const Offset(0, -80),
-                      child: Container(
-                        padding: const EdgeInsets.all(25.0),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFE3F2FD).withOpacity(0.95),
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 20,
-                              offset: const Offset(0, 10),
-                            ),
-                          ],
-                        ),
-                        child: Form(
-                          key: _formKey,
-                          child: Column(
-                            children: [
-                              const Text(
-                                'Enter your phone number below. We will send you a verification code to reset your password.',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 16, 
-                                  color: Color(0xFF3A506B),
-                                  height: 1.4,
-                                ),
-                              ),
-                              const SizedBox(height: 25),
-                              CustomTextField(
-                                labelText: "Phone number:",
-                                controller: _phoneController,
-                                validator: (value) {
-                                  if (value == null || value.trim().length < 10) {
-                                    return 'Please enter a valid phone number';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(height: 30),
-                              CustomButton(
-                                text: "SEND CODE",
-                                onPressed: _sendResetCode,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                  SizedBox(height: 60), // For status bar + app bar
+                  Text(
+                    _isOtpSent ? 'Enter Code' : 'Reset Password',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+            
+            // --- 2. White Card with Form ---
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              // We add a negative margin to make it overlap the blue
+              child: Transform.translate(
+                offset: const Offset(0, -80), // Pulls the card up
+                child: Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Form(
+                      key: _formKey,
+                      child: _isOtpSent ? _buildOtpScreen() : _buildPhoneScreen(),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
+    );
+  }
+
+  // --- UI for entering the phone number ---
+  Widget _buildPhoneScreen() {
+    return Column(
+      children: [
+        Text(
+          'Enter your phone number below. We will send you a verification code to reset your password.',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+        ),
+        const SizedBox(height: 24),
+        TextFormField(
+          controller: _phoneController,
+          decoration: InputDecoration(
+            labelText: 'Phone number',
+            prefixIcon: Icon(Icons.phone),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+          keyboardType: TextInputType.phone,
+          validator: (v) => v!.length < 10 ? 'Enter a valid number' : null,
+        ),
+        const SizedBox(height: 24),
+        ElevatedButton(
+          onPressed: _sendCode,
+          child: Text('SEND CODE'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color(0xFF007BFF),
+            foregroundColor: Colors.white,
+            minimumSize: Size(double.infinity, 50),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // --- UI for entering the OTP ---
+  Widget _buildOtpScreen() {
+    return Column(
+      children: [
+        Text(
+          'Enter the 6-digit code sent to\n${_phoneController.text}',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+        ),
+        const SizedBox(height: 24),
+        TextFormField(
+          controller: _otpController,
+          decoration: InputDecoration(
+            labelText: 'OTP',
+            prefixIcon: Icon(Icons.password_rounded),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+          keyboardType: TextInputType.number,
+          maxLength: 6,
+          validator: (v) => v!.length < 6 ? 'Enter a 6-digit OTP' : null,
+        ),
+        const SizedBox(height: 16),
+        
+        // Timer and Resend button
+        _canResend
+          ? TextButton(
+              onPressed: _sendCode, 
+              child: Text('Resend OTP', style: TextStyle(fontSize: 16))
+            )
+          : Text(
+              'Resend OTP in $_timerText', 
+              style: TextStyle(color: Colors.grey, fontSize: 16)
+            ),
+        
+        const SizedBox(height: 24),
+        ElevatedButton(
+          onPressed: _verifyOtp,
+          child: Text('VERIFY'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color(0xFF007BFF),
+            foregroundColor: Colors.white,
+            minimumSize: Size(double.infinity, 50),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: _changeNumber,
+          child: Text('Change Number'),
+        ),
+      ],
     );
   }
 }

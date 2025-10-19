@@ -3,7 +3,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 // Make sure this import path is correct for your project!
-import 'package:rezume_app/screens/language_selection_screen.dart';
+import 'package:rezume_app/screens/language_selection_screen.dart'; 
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -12,45 +12,40 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-// Add 'with SingleTickerProviderStateMixin' for the animation
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-  // --- 1. Animation Variables ---
+      
   late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _fadeAnimation;
+  late Animation<double> _imageScaleAnimation;
+  late Animation<double> _imageFadeAnimation;
 
   @override
   void initState() {
     super.initState();
 
-    // --- 2. Initialize the Animation ---
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 2000), // Shorter duration
       vsync: this,
     );
 
-    _scaleAnimation = CurvedAnimation(
+    // Image animation
+    _imageScaleAnimation = CurvedAnimation(
       parent: _controller,
-      curve: Curves.easeOutBack, // This gives a nice "pop"
+      curve: Curves.easeOutBack,
     );
-
-    _fadeAnimation = CurvedAnimation(
+    _imageFadeAnimation = CurvedAnimation(
       parent: _controller,
       curve: Curves.easeIn,
     );
 
-    // Start the animation
     _controller.forward();
 
-    // --- 3. Your Existing Navigation Timer ---
-    // This will run *after* the animation has had time to play
+    // Navigate after the animation is complete
     Timer(
-      const Duration(seconds: 3), // 3-second delay
+      const Duration(seconds: 3), // Total 3-second delay
       () => Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          // Change this to your login screen if the user is already logged in
           builder: (context) => const LanguageSelectionScreen(),
         ),
       ),
@@ -59,7 +54,6 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void dispose() {
-    // 4. Clean up the controller
     _controller.dispose();
     super.dispose();
   }
@@ -67,37 +61,27 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // The same dark blue background from your screenshot
-      backgroundColor: const Color(0xFF2c3e50),
+      backgroundColor: Colors.white,
       body: Center(
-        // --- 5. Apply the Animations ---
-        child: FadeTransition(
-          opacity: _fadeAnimation,
-          child: ScaleTransition(
-            scale: _scaleAnimation,
-            child: const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Your Icon
-                Icon(
-                  Icons.article_rounded,
-                  size: 100,
-                  color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Your animated custom image
+            FadeTransition(
+              opacity: _imageFadeAnimation,
+              child: ScaleTransition(
+                scale: _imageScaleAnimation,
+                child: Image.asset(
+                  'assets/images/rezoom_logo.png', // Your custom logo path
+                  width: 200, 
+                  height: 200, 
                 ),
-                SizedBox(height: 20),
-                // Your App Name
-                Text(
-                  'REZOOM',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    letterSpacing: 2.0,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+            
+            // The black "REZOOM" Text widget has been removed.
+            
+          ],
         ),
       ),
     );
