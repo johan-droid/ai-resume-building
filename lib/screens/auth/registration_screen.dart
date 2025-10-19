@@ -11,11 +11,12 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  String _selectedGender = ''; // To track selected gender
+  String _selectedGender = '';
 
   @override
   void dispose() {
@@ -24,6 +25,43 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
+  }
+  
+  Widget _buildMandatoryLabel(String title) {
+    return RichText(
+      text: TextSpan(
+        text: title,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: Colors.black54,
+        ),
+        children: const <TextSpan>[
+          TextSpan(text: ' *', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+        ],
+      ),
+    );
+  }
+  
+  void _register() {
+    if (_formKey.currentState!.validate()) {
+      if (_selectedGender.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please select a gender')),
+        );
+        return;
+      }
+
+      print('Registration successful!');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const MainScreen()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all mandatory fields')),
+      );
+    }
   }
 
   @override
@@ -76,47 +114,68 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   color: const Color(0xFFE3F2FD).withOpacity(0.9),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Column(
-                  children: [
-                    CustomTextField(
-                      labelText: "Full name:",
-                      controller: _nameController,
-                    ),
-                    const SizedBox(height: 20),
-                    CustomTextField(
-                      labelText: "Phone number:",
-                      controller: _phoneController,
-                    ),
-
-                    const SizedBox(height: 20),
-                    CustomTextField(
-                      labelText: "Set Password:",
-                      controller: _passwordController,
-                      isPassword: true,
-                    ),
-                    const SizedBox(height: 20),
-                    CustomTextField(
-                      labelText: "Confirm Password:",
-                      controller: _confirmPasswordController,
-                      isPassword: true,
-                      validator: (value) {
-                        if (value != _passwordController.text) {
-                          return 'Passwords do not match';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    // 1. "Gender:" Label
-                    const Text(
-                      'Gender:',
-                      // Make sure this style matches your other labels (like "Full name:")
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black54,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildMandatoryLabel('Full name:'),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _nameController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                        ),
+                        validator: (v) => v!.isEmpty ? 'Name cannot be empty' : null,
                       ),
-                    ),
+                      const SizedBox(height: 20),
+                      
+                      _buildMandatoryLabel('Phone number:'),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _phoneController,
+                        keyboardType: TextInputType.phone,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                        ),
+                        validator: (v) => v!.length < 10 ? 'Enter a valid 10-digit number' : null,
+                      ),
+                      const SizedBox(height: 20),
+                      
+                      _buildMandatoryLabel('Set Password:'),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                        ),
+                        validator: (v) => v!.length < 6 ? 'Password must be at least 6 characters' : null,
+                      ),
+                      const SizedBox(height: 20),
+                      
+                      _buildMandatoryLabel('Confirm Password:'),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _confirmPasswordController,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                        ),
+                        validator: (v) {
+                          if (v != _passwordController.text) {
+                            return 'Passwords do not match';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      
+                      _buildMandatoryLabel('Gender:'),
                     const SizedBox(height: 16),
 
                     // 2. The Row of new buttons
@@ -146,25 +205,35 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             });
                           },
                         ),
+
+                        // --- Other Button ---
+                        _buildGenderOption(
+                          iconPath: 'assets/images/other_avatar.png',
+                          label: 'Other',
+                          isSelected: _selectedGender == 'Other',
+                          onTap: () {
+                            setState(() {
+                              _selectedGender = 'Other';
+                            });
+                          },
+                        ),
                       ],
                     ),
 
-                    const SizedBox(
-                        height: 24), // Add spacing before your "SUBMIT" button
-                    CustomButton(
-                      text: "SUBMIT",
-                      onPressed: () {
-                        // Add registration logic here
-                        print("Submit button pressed");
-                        // Navigate to the main screen
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MainScreen()),
-                        );
-                      },
-                    )
-                  ],
+                      const SizedBox(height: 24),
+                      CustomButton(
+                        text: "SUBMIT",
+                        onPressed: _register,
+                      ),
+                      const SizedBox(height: 16),
+                      const Center(
+                        child: Text(
+                          '* Mandatory',
+                          style: TextStyle(color: Colors.red, fontSize: 14),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
