@@ -3,7 +3,6 @@ import 'package:rezume_app/main.dart';
 import 'package:rezume_app/screens/auth/registration_screen.dart';
 import 'package:rezume_app/screens/auth/forgot_password_screen.dart';
 import 'package:rezume_app/widgets/custom_button.dart';
-import 'package:rezume_app/widgets/custom_textfield.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -33,12 +32,12 @@ class _LoginScreenState extends State<LoginScreen> {
       // In a real app, you'd check this against your backend.
       // For now, any 10-digit number and any 6+ char password will work.
       print('Login successful!');
-      
+
       // Navigate to the main screen
       Navigator.pushReplacement(
         context,
         // IMPORTANT: Use your main screen with the bottom nav bar here
-        MaterialPageRoute(builder: (context) => const MainScreen()), 
+        MaterialPageRoute(builder: (context) => const MainScreen()),
       );
     } else {
       // If the form is not valid, show a snackbar
@@ -166,7 +165,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 keyboardType: TextInputType.phone,
                                 validator: (value) {
-                                  if (value == null || value.trim().length < 10) {
+                                  if (value == null ||
+                                      value.trim().length < 10) {
                                     return 'Please enter a valid 10-digit number';
                                   }
                                   return null;
@@ -183,7 +183,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 obscureText: true,
                                 validator: (value) {
-                                  if (value == null || value.trim().length < 6) {
+                                  if (value == null ||
+                                      value.trim().length < 6) {
                                     return 'Password must be at least 6 characters';
                                   }
                                   return null;
@@ -216,7 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                               const SizedBox(height: 20),
-                              
+
                               // LOGIN Button - now calls _login()
                               CustomButton(
                                 text: "LOGIN",

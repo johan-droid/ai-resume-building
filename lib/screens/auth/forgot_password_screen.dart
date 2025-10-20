@@ -28,7 +28,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     _timer?.cancel();
     super.dispose();
   }
-  
+
   // --- 2. Timer Logic ---
   void _startTimer() {
     _canResend = false;
@@ -129,7 +129,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ],
               ),
             ),
-            
+
             // --- 2. White Card with Form ---
             Padding(
               padding: const EdgeInsets.all(24.0),
@@ -145,7 +145,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     padding: const EdgeInsets.all(24.0),
                     child: Form(
                       key: _formKey,
-                      child: _isOtpSent ? _buildOtpScreen() : _buildPhoneScreen(),
+                      child:
+                          _isOtpSent ? _buildOtpScreen() : _buildPhoneScreen(),
                     ),
                   ),
                 ),
@@ -180,7 +181,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         const SizedBox(height: 24),
         ElevatedButton(
           onPressed: _sendCode,
-          child: Text('SEND CODE'),
           style: ElevatedButton.styleFrom(
             backgroundColor: Color(0xFF007BFF),
             foregroundColor: Colors.white,
@@ -189,6 +189,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               borderRadius: BorderRadius.circular(30),
             ),
           ),
+          child: Text('SEND CODE'),
         ),
       ],
     );
@@ -216,22 +217,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           validator: (v) => v!.length < 6 ? 'Enter a 6-digit OTP' : null,
         ),
         const SizedBox(height: 16),
-        
+
         // Timer and Resend button
         _canResend
-          ? TextButton(
-              onPressed: _sendCode, 
-              child: Text('Resend OTP', style: TextStyle(fontSize: 16))
-            )
-          : Text(
-              'Resend OTP in $_timerText', 
-              style: TextStyle(color: Colors.grey, fontSize: 16)
-            ),
-        
+            ? TextButton(
+                onPressed: _sendCode,
+                child: Text('Resend OTP', style: TextStyle(fontSize: 16)))
+            : Text('Resend OTP in $_timerText',
+                style: TextStyle(color: Colors.grey, fontSize: 16)),
+
         const SizedBox(height: 24),
         ElevatedButton(
           onPressed: _verifyOtp,
-          child: Text('VERIFY'),
           style: ElevatedButton.styleFrom(
             backgroundColor: Color(0xFF007BFF),
             foregroundColor: Colors.white,
@@ -240,6 +237,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               borderRadius: BorderRadius.circular(30),
             ),
           ),
+          child: Text('VERIFY'),
         ),
         TextButton(
           onPressed: _changeNumber,

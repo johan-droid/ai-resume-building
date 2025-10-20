@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rezume_app/main.dart';
 import 'package:rezume_app/widgets/custom_button.dart';
-import 'package:rezume_app/widgets/custom_textfield.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -26,7 +25,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     _confirmPasswordController.dispose();
     super.dispose();
   }
-  
+
   Widget _buildMandatoryLabel(String title) {
     return RichText(
       text: TextSpan(
@@ -37,12 +36,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           color: Colors.black54,
         ),
         children: const <TextSpan>[
-          TextSpan(text: ' *', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+          TextSpan(
+              text: ' *',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
         ],
       ),
     );
   }
-  
+
   void _register() {
     if (_formKey.currentState!.validate()) {
       if (_selectedGender.isEmpty) {
@@ -125,12 +126,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         controller: _nameController,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 16),
                         ),
-                        validator: (v) => v!.isEmpty ? 'Name cannot be empty' : null,
+                        validator: (v) =>
+                            v!.isEmpty ? 'Name cannot be empty' : null,
                       ),
                       const SizedBox(height: 20),
-                      
+
                       _buildMandatoryLabel('Phone number:'),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -138,12 +141,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         keyboardType: TextInputType.phone,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 16),
                         ),
-                        validator: (v) => v!.length < 10 ? 'Enter a valid 10-digit number' : null,
+                        validator: (v) => v!.length < 10
+                            ? 'Enter a valid 10-digit number'
+                            : null,
                       ),
                       const SizedBox(height: 20),
-                      
+
                       _buildMandatoryLabel('Set Password:'),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -151,12 +157,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         obscureText: true,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 16),
                         ),
-                        validator: (v) => v!.length < 6 ? 'Password must be at least 6 characters' : null,
+                        validator: (v) => v!.length < 6
+                            ? 'Password must be at least 6 characters'
+                            : null,
                       ),
                       const SizedBox(height: 20),
-                      
+
                       _buildMandatoryLabel('Confirm Password:'),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -164,7 +173,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         obscureText: true,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 16),
                         ),
                         validator: (v) {
                           if (v != _passwordController.text) {
@@ -174,51 +184,51 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         },
                       ),
                       const SizedBox(height: 20),
-                      
+
                       _buildMandatoryLabel('Gender:'),
-                    const SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
-                    // 2. The Row of new buttons
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        // --- Male Button ---
-                        _buildGenderOption(
-                          iconPath: 'assets/images/male_avatar.png',
-                          label: 'Male',
-                          isSelected: _selectedGender == 'Male',
-                          onTap: () {
-                            setState(() {
-                              _selectedGender = 'Male';
-                            });
-                          },
-                        ),
+                      // 2. The Row of new buttons
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          // --- Male Button ---
+                          _buildGenderOption(
+                            iconPath: 'assets/images/male_avatar.png',
+                            label: 'Male',
+                            isSelected: _selectedGender == 'Male',
+                            onTap: () {
+                              setState(() {
+                                _selectedGender = 'Male';
+                              });
+                            },
+                          ),
 
-                        // --- Female Button ---
-                        _buildGenderOption(
-                          iconPath: 'assets/images/female_avatar.png',
-                          label: 'Female',
-                          isSelected: _selectedGender == 'Female',
-                          onTap: () {
-                            setState(() {
-                              _selectedGender = 'Female';
-                            });
-                          },
-                        ),
+                          // --- Female Button ---
+                          _buildGenderOption(
+                            iconPath: 'assets/images/female_avatar.png',
+                            label: 'Female',
+                            isSelected: _selectedGender == 'Female',
+                            onTap: () {
+                              setState(() {
+                                _selectedGender = 'Female';
+                              });
+                            },
+                          ),
 
-                        // --- Other Button ---
-                        _buildGenderOption(
-                          iconPath: 'assets/images/other_avatar.png',
-                          label: 'Other',
-                          isSelected: _selectedGender == 'Other',
-                          onTap: () {
-                            setState(() {
-                              _selectedGender = 'Other';
-                            });
-                          },
-                        ),
-                      ],
-                    ),
+                          // --- Other Button ---
+                          _buildGenderOption(
+                            iconPath: 'assets/images/other_avatar.png',
+                            label: 'Other',
+                            isSelected: _selectedGender == 'Other',
+                            onTap: () {
+                              setState(() {
+                                _selectedGender = 'Other';
+                              });
+                            },
+                          ),
+                        ],
+                      ),
 
                       const SizedBox(height: 24),
                       CustomButton(
