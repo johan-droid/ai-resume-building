@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rezume_app/main.dart';
 import 'package:rezume_app/widgets/custom_button.dart';
+import 'package:rezume_app/screens/auth/login_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -54,9 +55,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       }
 
       print('Registration successful!');
-      Navigator.pushReplacement(
+      
+      // Navigate back to LoginScreen with success flag
+      Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const MainScreen()),
+        MaterialPageRoute(
+          builder: (context) => const LoginScreen(registrationSuccessful: true),
+        ),
+        (Route<dynamic> route) => false, // This removes all previous screens
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

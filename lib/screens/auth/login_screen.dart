@@ -4,7 +4,9 @@ import 'package:rezume_app/screens/auth/registration_screen.dart';
 import 'package:rezume_app/screens/auth/forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final bool registrationSuccessful;
+  
+  const LoginScreen({super.key, this.registrationSuccessful = false});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -15,6 +17,23 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Show success message if coming from registration
+    if (widget.registrationSuccessful) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Registration successful! Please login with your credentials.'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 3),
+          ),
+        );
+      });
+    }
+  }
 
   @override
   void dispose() {
