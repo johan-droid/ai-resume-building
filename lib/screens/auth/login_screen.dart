@@ -4,9 +4,7 @@ import 'package:rezume_app/screens/auth/registration_screen.dart';
 import 'package:rezume_app/screens/auth/forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  final bool registrationSuccessful;
-  
-  const LoginScreen({super.key, this.registrationSuccessful = false});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -17,23 +15,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    // Show success message if coming from registration
-    if (widget.registrationSuccessful) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Registration successful! Please login with your credentials.'),
-            backgroundColor: Colors.green,
-            duration: Duration(seconds: 3),
-          ),
-        );
-      });
-    }
-  }
 
   @override
   void dispose() {
@@ -224,8 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                         // 6. Rounded LOGIN Button
                         ElevatedButton(
-                          onPressed: _login, // Your login function
-                          child: const Text('LOGIN'),
+                          onPressed: _login,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF007BFF),
                             foregroundColor: Colors.white,
@@ -237,7 +217,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
-                          ),
+                          ), // Your login function
+                          child: const Text('LOGIN'),
                         ),
 
                         const SizedBox(height: 24),
