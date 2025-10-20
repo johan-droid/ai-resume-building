@@ -16,44 +16,37 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
   String _scoreMessage = '';
   List<Map<String, dynamic>> _suggestions = [];
 
-  // --- 2. Master List of All Possible Suggestions ---
-  // THIS IS THE NEW, SMARTER LIST
+  // --- REPLACE THE OLD LIST WITH THIS NEW ONE ---
   final List<Map<String, dynamic>> _allSuggestions = [
     {
       'icon': Icons.trending_up_rounded,
-      'title': 'Use Stronger Action Verbs',
-      'subtitle':
-          "In your Experience, change 'responsible for' to a strong verb like 'Managed vehicle upkeep' or 'Oversaw daily safety checks'.",
-    },
-    {
-      'icon': Icons.vpn_key_rounded,
-      'title': 'Add Job-Specific Keywords',
-      'subtitle':
-          "Your 'Driver' resume is missing keywords like 'Route Planning', 'Fleet Management', or 'Safety Compliance'. Add them to your Skills.",
+      'title': 'Use Industry Action Verbs',
+      'subtitle': "Replace 'responsible for vehicle upkeep' with stronger verbs like 'Maintained vehicle fleet' or 'Performed daily vehicle inspections'.",
     },
     {
       'icon': Icons.calculate_rounded,
-      'title': 'Quantify Your Impact',
-      'subtitle':
-          "You did great with 'Improved by 15%'. Do it again! For 'Managed all delivery routes', add a number: 'Managed 12 daily routes'.",
+      'title': 'Quantify Driving Experience',
+      'subtitle': "Instead of just 'Managed routes', specify the scale: e.g., 'Managed 10+ daily delivery routes covering 150km' or 'Operated commercial vehicles (specify type)'.",
     },
     {
-      'icon': Icons.article_rounded,
-      'title': 'Tailor Your Job Title',
-      'subtitle':
-          "Your title is 'Driver', but the (fake) job ad is for 'Logistics Coordinator'. Change your title to match the job you want.",
+      'icon': Icons.local_shipping_rounded, // Relevant icon
+      'title': 'Highlight Logistics Skills',
+      'subtitle': "Add keywords relevant to driving/logistics like 'Route Optimization', 'Load Securement', 'DOT Regulations', or 'Defensive Driving Techniques'.",
+    },
+    {
+      'icon': Icons.card_membership_rounded, // Relevant icon
+      'title': 'Mention Licenses/Certifications',
+      'subtitle': "Do you have a Commercial Driver's License (CDL) or specific endorsements? Add a 'Licenses' section to clearly state them.",
+    },
+    {
+      'icon': Icons.build_circle_rounded, // Relevant icon
+      'title': 'Detail Maintenance Skills',
+      'subtitle': "Expand on 'vehicle upkeep'. Mention specific tasks like 'Minor repairs', 'Fluid checks', 'Tire pressure monitoring'.",
     },
     {
       'icon': Icons.spellcheck_rounded,
-      'title': 'Fix Potential Typos',
-      'subtitle':
-          "We found a potential typo: 'vehicle upkeep'. Did you mean 'vehicle maintenance'? Please review your Experience section.",
-    },
-    {
-      'icon': Icons.format_list_bulleted_rounded,
-      'title': 'Use Bullet Points',
-      'subtitle':
-          "Your 'Experience' section is a large paragraph. Break it into 3-4 bullet points to make it easier to read quickly.",
+      'title': 'Check Technical Terms',
+      'subtitle': "Ensure specific vehicle parts, tool names, or safety procedures mentioned are spelled correctly.",
     }
   ];
 
@@ -62,6 +55,17 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
     super.initState();
     // This runs the function as soon as the page opens
     _generateFakeAtsData();
+  }
+
+  // --- ADD THIS HELPER FUNCTION ---
+  Color _getScoreColor(int score) {
+    if (score < 50) {
+      return Colors.red.shade600; // Poor score
+    } else if (score < 75) {
+      return Colors.orange.shade600; // Average score
+    } else {
+      return Colors.green.shade600; // Good score
+    }
   }
 
   // --- 3. The "AI" Simulation Function ---
@@ -124,10 +128,12 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
                         // --- DYNAMIC SCORE ---
                         Text(
                           '$_atsScore%',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 72,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF007BFF),
+                            // --- THIS IS THE CHANGE ---
+                            color: _getScoreColor(_atsScore), // Use the dynamic color
+                            // --- END OF CHANGE ---
                           ),
                         ),
                         const SizedBox(height: 8),
