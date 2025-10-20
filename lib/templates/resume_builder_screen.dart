@@ -70,6 +70,9 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
 
   final List<ChatMessage> _messages = [];
   final TextEditingController _textController = TextEditingController();
+  // Controller for the text input field
+  // FocusNode to manage focus on the chat input
+  final FocusNode _chatFocusNode = FocusNode();
   int _currentQuestionIndex = 0;
   final Map<String, String> _resumeDetails = {};
 
@@ -85,6 +88,7 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
   @override
   void dispose() {
     _textController.dispose();
+    _chatFocusNode.dispose();
     super.dispose();
   }
 
@@ -141,6 +145,13 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
 
     // Clear the text field
     _textController.clear();
+
+    // --- THIS IS THE FIX ---
+    // If the conversation is not over, return focus to the chat box
+    if (!_isConversationComplete) {
+      _chatFocusNode.requestFocus();
+    }
+    // --- END OF FIX ---
 
     // Ask the next question after a short delay
     Future.delayed(const Duration(milliseconds: 500), () {
@@ -253,6 +264,7 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
           Expanded(
             child: TextField(
               controller: _textController,
+              focusNode: _chatFocusNode,
               decoration: InputDecoration(
                 hintText: "Type your answer...",
                 border: OutlineInputBorder(

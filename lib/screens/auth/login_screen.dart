@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:rezume_app/main.dart';
 import 'package:rezume_app/screens/auth/registration_screen.dart';
 import 'package:rezume_app/screens/auth/forgot_password_screen.dart';
-import 'package:rezume_app/widgets/custom_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -49,26 +48,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // For the background icon pattern
-    final List<IconData> backgroundIcons = [
-      Icons.construction,
-      Icons.cleaning_services,
-      Icons.plumbing,
-      Icons.delivery_dining,
-      Icons.engineering,
-      Icons.carpenter,
-      Icons.format_paint,
-      Icons.agriculture,
-      Icons.local_shipping,
-      Icons.handyman,
-      Icons.electrical_services,
-      Icons.build,
-    ];
+    // Get the screen height
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: const Color(0xFFEBF4FF),
-
-      // --- THIS IS THE FIX ---
 
       // 1. This tells the blue body to go up behind the app bar
       extendBodyBehindAppBar: true,
@@ -81,177 +65,197 @@ class _LoginScreenState extends State<LoginScreen> {
         // 3. This makes the back arrow WHITE and VISIBLE
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      // --- END OF FIX ---
 
+      // --- NEW REDESIGNED BODY ---
       body: Stack(
         children: [
-          // Background icon pattern
-          IgnorePointer(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 5,
-                childAspectRatio: 1.0,
-              ),
-              itemCount: 100, // Just a large number to fill the screen
-              itemBuilder: (context, index) {
-                return Icon(
-                  backgroundIcons[index % backgroundIcons.length],
-                  color: Colors.blue.withOpacity(0.08),
-                );
-              },
-            ),
-          ),
-          // Main UI
-          SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  // Upper blue curved part
-                  Container(
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.35,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF007BFF),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(80),
-                      ),
-                    ),
-                    child: const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 30.0, bottom: 40.0),
-                        child: Text(
-                          "Welcome\nBack!!",
-                          style: TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            height: 1.2,
-                          ),
-                        ),
-                      ),
-                    ),
+          // --- LAYER 1: THE BACKGROUND ---
+          Column(
+            children: [
+              // 1. The blue "Welcome Back" header
+              Container(
+                height: screenHeight * 0.45,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: Color(0xFF007BFF),
+                  // This gives it the nice curve
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(60),
                   ),
-
-                  // Login Form Card
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                    child: Transform.translate(
-                      offset: const Offset(0, -80),
-                      child: Container(
-                        padding: const EdgeInsets.all(25.0),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFE3F2FD).withOpacity(0.95),
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 20,
-                              offset: const Offset(0, 10),
-                            ),
-                          ],
-                        ),
-                        // --- 3. Wrap your form fields in a Form widget ---
-                        child: Form(
-                          key: _formKey,
-                          child: Column(
-                            children: [
-                              // Phone Number Field
-                              TextFormField(
-                                controller: _phoneController,
-                                decoration: const InputDecoration(
-                                  labelText: 'Phone number',
-                                  border: OutlineInputBorder(),
-                                ),
-                                keyboardType: TextInputType.phone,
-                                validator: (value) {
-                                  if (value == null ||
-                                      value.trim().length < 10) {
-                                    return 'Please enter a valid 10-digit number';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(height: 16),
-
-                              // Password Field
-                              TextFormField(
-                                controller: _passwordController,
-                                decoration: const InputDecoration(
-                                  labelText: 'Password',
-                                  border: OutlineInputBorder(),
-                                ),
-                                obscureText: true,
-                                validator: (value) {
-                                  if (value == null ||
-                                      value.trim().length < 6) {
-                                    return 'Password must be at least 6 characters';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(height: 10),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const ForgotPasswordScreen()),
-                                    );
-                                  },
-                                  style: TextButton.styleFrom(
-                                    padding: EdgeInsets.zero,
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                  ),
-                                  child: const Text(
-                                    "Forgot password?",
-                                    style: TextStyle(
-                                      color: Color(0xFF007BFF),
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-
-                              // LOGIN Button - now calls _login()
-                              CustomButton(
-                                text: "LOGIN",
-                                onPressed: _login, // <-- Use the new function
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // Register button
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                ),
+                // --- REPLACED CHILD: Logo + Spaced Title ---
+                child: Padding(
+                  // Adjust top padding to make room for the logo
+                  padding: const EdgeInsets.only(left: 32.0, top: 90.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Don't have an account?"),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const RegistrationScreen()),
-                          );
-                        },
-                        child: const Text(
-                          "Register",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                      // 1. THE LOGO (document icon)
+                      Icon(
+                        Icons.article_rounded,
+                        color: Colors.white.withOpacity(0.9),
+                        size: 50,
+                      ),
+
+                      // 2. SPACING TO PUSH TEXT DOWN
+                      const SizedBox(height: 20),
+
+                      // 3. YOUR TEXT
+                      const Text(
+                        'Welcome\nBack!!',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 44,
+                          fontWeight: FontWeight.bold,
+                          height: 1.2,
                         ),
                       ),
                     ],
-                  )
-                ],
+                  ),
+                ),
+              ),
+
+              // 3. The light blue icon background
+              Expanded(
+                child: Container(
+                  color: const Color(0xFFF0F8FF),
+                ),
+              ),
+            ],
+          ),
+
+          // --- LAYER 2: THE SCROLLABLE LOGIN CARD ---
+          SingleChildScrollView(
+            child: Padding(
+              // Start the card from a bit higher up
+              padding: EdgeInsets.only(
+                top: screenHeight * 0.35,
+                left: 24,
+                right: 24,
+              ),
+              child: Card(
+                elevation: 8,
+                shadowColor: Colors.black.withOpacity(0.1),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Form(
+                    key: _formKey, // Your FormKey
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // 4. Rounded Phone Number Field
+                        TextFormField(
+                          controller: _phoneController,
+                          decoration: InputDecoration(
+                            labelText: 'Phone number',
+                            prefixIcon: const Icon(Icons.phone_outlined),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          keyboardType: TextInputType.phone,
+                          validator: (value) {
+                            if (value == null || value.trim().length < 10) {
+                              return 'Please enter a valid 10-digit number';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+
+                        // 5. Rounded Password Field
+                        TextFormField(
+                          controller: _passwordController,
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            prefixIcon: const Icon(Icons.lock_outline_rounded),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          obscureText: true,
+                          validator: (value) {
+                            if (value == null || value.trim().length < 6) {
+                              return 'Password must be at least 6 characters';
+                            }
+                            return null;
+                          },
+                        ),
+
+                        // Forgot Password Button
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ForgotPasswordScreen()),
+                              );
+                            },
+                            child: const Text('Forgot password?'),
+                          ),
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // 6. Rounded LOGIN Button
+                        ElevatedButton(
+                          onPressed: _login, // Your login function
+                          child: const Text('LOGIN'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF007BFF),
+                            foregroundColor: Colors.white,
+                            minimumSize: const Size(double.infinity, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            textStyle: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // 7. Styled "Register" Text
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Don't have an account? ",
+                              style: TextStyle(color: Colors.grey[600]),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const RegistrationScreen()),
+                                );
+                              },
+                              style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero),
+                              child: const Text(
+                                'Register',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF007BFF),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
