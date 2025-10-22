@@ -4,7 +4,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({super.key});
+  final Color themeColor;
+  final String role; // 'User' or 'Organization'
+
+  const ForgotPasswordScreen({
+    super.key,
+    required this.themeColor,
+    required this.role,
+  });
 
   @override
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
@@ -12,6 +19,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _phoneController = TextEditingController();
+  final _emailController = TextEditingController();
   final _otpController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -24,6 +32,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   void dispose() {
     _phoneController.dispose();
+    _emailController.dispose();
     _otpController.dispose();
     _timer?.cancel();
     super.dispose();
@@ -50,7 +59,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   // --- 3. "Send Code" Logic ---
   void _sendCode() {
     if (_formKey.currentState!.validate()) {
-      print('Sending OTP to ${_phoneController.text}');
+      final contactInfo = widget.role == 'User' ? _phoneController.text : _emailController.text;
+      print('Sending OTP to $contactInfo');
       setState(() {
         _isOtpSent = true;
       });
@@ -73,14 +83,26 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     }
   }
 
-  // --- 5. "Change Number" Logic ---
-  void _changeNumber() {
+  // --- 5. "Change Contact" Logic ---
+  void _changeContact() {
     _timer?.cancel();
     setState(() {
       _isOtpSent = false;
       _canResend = false;
       _otpController.clear();
+      if (widget.role == 'User') {
+        _phoneController.clear();
+      } else {
+        _emailController.clear();
+      }
     });
+  }
+
+  // --- 6. Resend Code Logic ---
+  void _resendCode() {
+    if (_canResend) {
+      _sendCode(); // Just call send code again for demo
+    }
   }
 
   String get _timerText {
@@ -91,24 +113,31 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // This uses the same UI structure as your Login screen
+    // Determine background color based on theme
+    final Color bgColor = widget.themeColor == Color(0xFF007BFF)
+        ? Color(0xFFF0F8FF) // Light Blue
+        : Colors.indigo.shade50; // Light Indigo
+
     return Scaffold(
-      extendBodyBehindAppBar: true, // Lets the body go behind the app bar
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
+      // --- ADD BACKGROUND COLOR ---
+      backgroundColor: bgColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // --- 1. Blue Header ---
+            // --- 1. Blue/Indigo Header ---
             Container(
               width: double.infinity,
-              height: 300, // Adjust as needed
+              height: 300,
               padding: const EdgeInsets.symmetric(horizontal: 24),
               decoration: BoxDecoration(
-                color: Color(0xFF007BFF), // Your app's main blue
+                // --- USE THEME COLOR ---
+                color: widget.themeColor,
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(50),
                 ),
@@ -145,8 +174,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     padding: const EdgeInsets.all(24.0),
                     child: Form(
                       key: _formKey,
-                      child:
-                          _isOtpSent ? _buildOtpScreen() : _buildPhoneScreen(),
+                      child: _isOtpSent
+                          ? _buildOtpScreen()
+                          : (widget.role == 'User'
+                              ? _buildPhoneScreen()
+                              : _buildEmailScreen()),
                     ),
                   ),
                 ),
@@ -182,7 +214,49 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         ElevatedButton(
           onPressed: _sendCode,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color(0xFF007BFF),
+            // --- USE THEME COLOR ---
+            backgroundColor: widget.themeColor,
+            foregroundColor: Colors.white,
+            minimumSize: Size(double.infinity, 50),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+          child: Text('SEND CODE'),
+        ),
+      ],
+    );
+  }
+
+  // --- UI for entering Email ---
+  Widget _buildEmailScreen() {
+    return Column(
+      children: [
+        Text(
+          'Enter your organization\'s email below. We will send you a verification code to reset your password.',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+        ),
+        const SizedBox(height: 24),
+        TextFormField(
+          controller: _emailController,
+          decoration: InputDecoration(
+            labelText: 'Organization\'s Email',
+            prefixIcon: Icon(Icons.email_outlined),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+          keyboardType: TextInputType.emailAddress,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) return 'Please enter email';
+            if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) return 'Enter valid email';
+            return null;
+          },
+        ),
+        const SizedBox(height: 24),
+        ElevatedButton(
+          onPressed: _sendCode,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: widget.themeColor,
             foregroundColor: Colors.white,
             minimumSize: Size(double.infinity, 50),
             shape: RoundedRectangleBorder(
@@ -197,10 +271,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   // --- UI for entering the OTP ---
   Widget _buildOtpScreen() {
+    final contactInfo = widget.role == 'User' ? _phoneController.text : _emailController.text;
     return Column(
       children: [
         Text(
-          'Enter the 6-digit code sent to\n${_phoneController.text}',
+          'Enter the 6-digit code sent to\n$contactInfo',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 16, color: Colors.grey[600]),
         ),
@@ -221,8 +296,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         // Timer and Resend button
         _canResend
             ? TextButton(
-                onPressed: _sendCode,
-                child: Text('Resend OTP', style: TextStyle(fontSize: 16)))
+                onPressed: _resendCode,
+                child: Text('Resend Code', style: TextStyle(fontSize: 16, color: widget.themeColor)))
             : Text('Resend OTP in $_timerText',
                 style: TextStyle(color: Colors.grey, fontSize: 16)),
 
@@ -230,7 +305,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         ElevatedButton(
           onPressed: _verifyOtp,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color(0xFF007BFF),
+            // --- USE THEME COLOR ---
+            backgroundColor: widget.themeColor,
             foregroundColor: Colors.white,
             minimumSize: Size(double.infinity, 50),
             shape: RoundedRectangleBorder(
@@ -240,8 +316,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           child: Text('VERIFY'),
         ),
         TextButton(
-          onPressed: _changeNumber,
-          child: Text('Change Number'),
+          onPressed: _changeContact,
+          child: Text(
+            widget.role == 'User' ? 'Change Number' : 'Change Email',
+            style: TextStyle(color: widget.themeColor.withOpacity(0.8)),
+          ),
         ),
       ],
     );

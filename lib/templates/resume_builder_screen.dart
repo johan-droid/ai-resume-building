@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:rezume_app/models/resume_template_model.dart';
+// For font loading
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class ChatMessage {
   final String text;
@@ -196,6 +201,106 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
     );
   }
 
+  // --- ADD THIS PDF GENERATION FUNCTION ---
+  Future<void> _generateDummyPdf() async {
+    final pdf = pw.Document();
+
+    // --- Load Fonts with Error Handling ---
+    pw.ThemeData myTheme;
+    
+    try {
+      // Try to load custom fonts
+      final fontData = await rootBundle.load("assets/fonts/NotoSans-Regular.ttf");
+      final hindiFontData = await rootBundle.load("assets/fonts/NotoSansDevanagari-Regular.ttf");
+      final odiaFontData = await rootBundle.load("assets/fonts/NotoSansOriya-Regular.ttf");
+
+      final ttf = pw.Font.ttf(fontData);
+      final hindiTtf = pw.Font.ttf(hindiFontData);
+      final odiaTtf = pw.Font.ttf(odiaFontData);
+
+      // Define Theme with Fallback Fonts
+      myTheme = pw.ThemeData.withFont(
+        base: ttf,
+        fontFallback: [hindiTtf, odiaTtf], // Use Hindi/Odia fonts when needed
+      );
+    } catch (e) {
+      // If fonts are missing, use default theme and show message
+      print('Custom fonts not found. Using default fonts. Error: $e');
+      myTheme = pw.ThemeData.base();
+      
+      // Show user-friendly message
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Note: Using default fonts. Add Noto fonts for better multilingual support.'),
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+    }
+
+    // --- Get the dummy data collected from chat ---
+    final name = _resumeDetails['fullName'] ?? 'N/A';
+    final phone = _resumeDetails['phone'] ?? 'N/A';
+    final city = _resumeDetails['city'] ?? 'N/A';
+    final jobType = _resumeDetails['jobType'] ?? 'N/A';
+    final experience = _resumeDetails['experience'] ?? 'N/A';
+    final qualification = _resumeDetails['qualification'] ?? 'N/A';
+    final skills = _resumeDetails['skills'] ?? 'N/A';
+    final availability = _resumeDetails['availability'] ?? 'N/A';
+
+    // --- Build the PDF Page ---
+    pdf.addPage(
+      pw.Page(
+        theme: myTheme, // Apply the theme with fallback fonts
+        pageFormat: PdfPageFormat.a4,
+        build: (pw.Context context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Center(
+                child: pw.Text(name, style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
+              ),
+              pw.Center(
+                child: pw.Text('$phone | $city'),
+              ),
+              pw.SizedBox(height: 20),
+
+              pw.Text('Job Objective', style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
+              pw.Divider(),
+              pw.Text('Seeking a $jobType position.'),
+              pw.SizedBox(height: 15),
+
+              pw.Text('Experience', style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
+              pw.Divider(),
+              pw.Text('$experience years'),
+              pw.SizedBox(height: 15),
+
+              pw.Text('Qualification', style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
+              pw.Divider(),
+              pw.Text(qualification),
+              pw.SizedBox(height: 15),
+
+              pw.Text('Skills', style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
+              pw.Divider(),
+              pw.Text(skills),
+              pw.SizedBox(height: 15),
+
+              pw.Text('Availability', style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
+              pw.Divider(),
+              pw.Text(availability),
+            ],
+          );
+        },
+      ),
+    );
+
+    // --- Show Preview/Save Screen ---
+    await Printing.layoutPdf(
+      onLayout: (PdfPageFormat format) async => pdf.save(),
+    );
+  }
+
   // --- ADD THIS ENTIRE NEW METHOD ---
   Widget _buildGenerateButton() {
     return Padding(
@@ -205,21 +310,8 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
         children: [
           ElevatedButton.icon(
             icon: const Icon(Icons.description_rounded, size: 20),
-            label: const Text('Generate Resume (with Typst)'),
-            onPressed: () {
-              // --- This is the dummy action ---
-              // In a real app, this would send your _resumeDetails
-              // map to your backend for Typst processing.
-
-              print('--- DUMMY DATA FOR TYPST ---');
-              print(_resumeDetails);
-
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Generating your multilingual resume...'),
-                ),
-              );
-            },
+            label: const Text('Generate PDF Resume'),
+            onPressed: _generateDummyPdf,
             style: ElevatedButton.styleFrom(
               backgroundColor:
                   const Color(0xFF007BFF), // Your app's theme color

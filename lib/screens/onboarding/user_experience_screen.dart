@@ -125,7 +125,7 @@ class _UserExperienceScreenState extends State<UserExperienceScreen> {
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                  MaterialPageRoute(builder: (context) => const HomeScreen(role: 'User')),
                 );
               },
             ),
@@ -137,7 +137,7 @@ class _UserExperienceScreenState extends State<UserExperienceScreen> {
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                  MaterialPageRoute(builder: (context) => const HomeScreen(role: 'User')),
                 );
               },
             ),

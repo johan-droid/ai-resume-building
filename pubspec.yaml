@@ -16,11 +16,16 @@ dependencies:
   intl: ^0.20.2
 
   # State Management & Preferences
-  provider: ^6.1.1
-  shared_preferences: ^2.2.2
+  provider: ^6.1.2
+  shared_preferences: ^2.2.3
 
   # Add this package for file uploading
   file_picker: ^10.3.3
+
+  # PDF generation and printing
+  pdf: ^3.10.8
+  printing: ^5.12.0
+  pinput: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -30,7 +35,23 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+  # 1. Check the 'assets:' section
+  # Make sure the FOLDER is listed here
   assets:
     - assets/images/rezoom_logo.png
     - assets/images/
     - assets/lang/
+    - assets/fonts/ # <-- This line MUST exist and be indented correctly
+
+  # 2. Fonts section (commented out until font files are added)
+  # Uncomment and add font files when available:
+  # fonts:
+  #   - family: NotoSans
+  #     fonts:
+  #       - asset: assets/fonts/NotoSans-Regular.ttf
+  #   - family: NotoSansDevanagari
+  #     fonts:
+  #       - asset: assets/fonts/NotoSansDevanagari-Regular.ttf
+  #   - family: NotoSansOriya
+  #     fonts:
+  #       - asset: assets/fonts/NotoSansOriya-Regular.ttf

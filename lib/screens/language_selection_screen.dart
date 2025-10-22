@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rezume_app/providers/locale_provider.dart';
+import 'package:rezume_app/providers/language_provider.dart';
 import 'package:rezume_app/screens/auth/login_screen.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {
@@ -51,8 +51,8 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
 
   void _selectLanguage(BuildContext context, String languageCode) {
     // Update the locale using the provider
-    final provider = Provider.of<LocaleProvider>(context, listen: false);
-    provider.setLocale(Locale(languageCode));
+    Provider.of<LanguageProvider>(context, listen: false)
+        .changeLanguage(Locale(languageCode));
 
     // Navigate to login screen
     Navigator.push(

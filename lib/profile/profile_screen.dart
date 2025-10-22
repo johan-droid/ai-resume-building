@@ -1,20 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:rezume_app/screens/auth/login_screen.dart'; // This path is correct as is
-import 'package:rezume_app/profile/help_center_screen.dart'; // Corrected path
+import 'package:rezume_app/screens/auth/login_screen.dart';
+import 'package:rezume_app/profile/help_center_screen.dart';
 import 'package:rezume_app/profile/edit_profile_screen.dart';
 import 'package:rezume_app/profile/saved_resumes_screen.dart';
+import 'package:rezume_app/profile/org_edit_profile_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class ProfileScreen extends StatefulWidget {
+  final String role; // 'User' or 'Organization'
+
+  const ProfileScreen({super.key, required this.role});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  // --- Theme Colors ---
+  final Color _userPrimaryColor = Color(0xFF007BFF);
+  final Color _orgPrimaryColor = Colors.indigo.shade600;
+
+  // Helper getter for current theme color
+  Color get _currentPrimaryColor =>
+      widget.role == 'User' ? _userPrimaryColor : _orgPrimaryColor;
+
+  // Dummy Data
+  String _profileName = '';
+  String _profileContact = '';
+  String _profileAvatarText = '';
+  String _profileEmail = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _setProfileData();
+  }
+
+  void _setProfileData() {
+    if (widget.role == 'User') {
+      _profileName = 'John Doe';
+      _profileContact = '+91 98765 43210';
+      _profileAvatarText = 'J';
+    } else {
+      _profileName = 'Acme Corp';
+      _profileContact = 'acmecorp@example.com';
+      _profileAvatarText = 'A';
+      _profileEmail = 'acmecorp@example.com';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF0F4F8),
       appBar: AppBar(
-        title: const Text("Your Profile"),
-        backgroundColor: Colors.white,
-        elevation: 1,
+        title: Text(widget.role == 'User' ? 'Your Profile' : 'Organization Profile'),
+        backgroundColor: _currentPrimaryColor,
+        elevation: 0,
       ),
       body: Column(
         children: [
@@ -25,16 +66,16 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               children: [
                 CircleAvatar(
-                  radius: 50, // Made the circle a bit larger
-                  backgroundColor: const Color(0xFF007BFF).withOpacity(0.1),
-                  child: const Text(
-                    'J',
-                    style: TextStyle(fontSize: 48, color: Color(0xFF007BFF)),
+                  radius: 50,
+                  backgroundColor: _currentPrimaryColor.withOpacity(0.1),
+                  child: Text(
+                    _profileAvatarText,
+                    style: TextStyle(fontSize: 48, color: _currentPrimaryColor, fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'John Doe', // Placeholder Name
+                Text(
+                  _profileName,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -43,7 +84,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '+91 98765 43210', // Placeholder Phone Number
+                  _profileContact,
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.grey[600],
@@ -63,28 +104,56 @@ class ProfileScreen extends StatelessWidget {
                   icon: Icons.person_outline_rounded,
                   title: 'Edit Profile',
                   onTap: () {
-                    // --- THIS IS THE CHANGE ---
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const EditProfileScreen(),
-                      ),
-                    );
-                    // --- END OF CHANGE ---
+                    if (widget.role == 'User') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const EditProfileScreen(),
+                        ),
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OrgEditProfileScreen(
+                            orgName: _profileName,
+                            orgEmail: _profileEmail,
+                            themeColor: _currentPrimaryColor,
+                            onProfileUpdated: (newName, newEmail) {
+                              setState(() {
+                                _profileName = newName;
+                                _profileEmail = newEmail;
+                                _profileContact = newEmail;
+                              });
+                            },
+                          ),
+                        ),
+                      );
+                    }
                   },
+                  color: _currentPrimaryColor,
                 ),
-                _buildProfileOption(
-                  icon: Icons.article_outlined,
-                  title: 'My Saved Resumes',
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SavedResumesScreen(),
-                      ),
-                    );
-                  },
-                ),
+                if (widget.role == 'User')
+                  _buildProfileOption(
+                    icon: Icons.article_outlined,
+                    title: 'My Saved Resumes',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SavedResumesScreen(),
+                        ),
+                      );
+                    },
+                    color: _currentPrimaryColor,
+                  )
+                else
+                  _buildProfileOption(
+                    icon: Icons.subscriptions_outlined,
+                    title: 'Ongoing Plan',
+                    onTap: () { /* Navigate to subscription details */ },
+                    color: _currentPrimaryColor,
+                  ),
 
                 _buildProfileOption(
                   icon: Icons.help_outline_rounded,
@@ -96,6 +165,7 @@ class ProfileScreen extends StatelessWidget {
                           builder: (context) => const HelpCenterScreen()),
                     );
                   },
+                  color: _currentPrimaryColor,
                 ),
                 const SizedBox(height: 20), // Spacer
                 _buildProfileOption(
@@ -108,7 +178,8 @@ class ProfileScreen extends StatelessWidget {
                       (Route<dynamic> route) => false,
                     );
                   },
-                  isLogout: true, // This will make it red
+                  color: Colors.red.shade600,
+                  isLogout: true,
                 ),
               ],
             ),
@@ -118,18 +189,14 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  // Helper method for building the new Material 3-style list tiles
   Widget _buildProfileOption({
     required IconData icon,
     required String title,
     required VoidCallback onTap,
-    bool isLogout = false, // To make the logout button red
+    required Color color,
+    bool isLogout = false,
   }) {
-    final Color color =
-        isLogout ? Colors.red.shade700 : const Color(0xFF0056b3);
-    // This light blue background will match your app's theme
-    final Color bgColor =
-        isLogout ? Colors.red.shade50 : const Color(0xFFf0f8ff);
+    final Color bgColor = isLogout ? Colors.red.shade50 : color.withOpacity(0.1);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
