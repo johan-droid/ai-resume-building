@@ -12,14 +12,14 @@ class ResumeDetailScreen extends StatelessWidget {
   void _sendEmail(BuildContext context, String status) {
     // In a real app, this would trigger a backend call to send an email.
     print('Sending ${status.toLowerCase()} email to ${candidate.email}');
-    
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Candidate has been ${status.toLowerCase()}!'),
         backgroundColor: status == 'Accepted' ? Colors.green : Colors.red,
       ),
     );
-    
+
     // Go back to the list after action
     Navigator.of(context).pop();
   }
@@ -27,13 +27,13 @@ class ResumeDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // --- ADD THIS LINE ---
-    final Color _primaryColor = Colors.indigo.shade600;
+    final Color primaryColor = Colors.indigo.shade600;
     // --- END OF ADDITION ---
 
     return Scaffold(
       appBar: AppBar(
         title: Text(candidate.name),
-        backgroundColor: _primaryColor,
+        backgroundColor: primaryColor,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -46,31 +46,37 @@ class ResumeDetailScreen extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 40,
-                    backgroundColor: _primaryColor.withOpacity(0.1),
-                    child: Text(candidate.name.substring(0, 1), style: TextStyle(fontSize: 32, color: _primaryColor)),
+                    backgroundColor: primaryColor.withOpacity(0.1),
+                    child: Text(candidate.name.substring(0, 1),
+                        style: TextStyle(fontSize: 32, color: primaryColor)),
                   ),
                   SizedBox(height: 12),
-                  Text(candidate.name, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                  Text(candidate.jobProfile, style: TextStyle(fontSize: 18, color: Colors.grey[600])),
+                  Text(candidate.name,
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  Text(candidate.jobProfile,
+                      style: TextStyle(fontSize: 18, color: Colors.grey[600])),
                   Text('${candidate.location} | ${candidate.email}'),
                 ],
               ),
             ),
             SizedBox(height: 24),
-            
+
             // --- Sections ---
-            _buildSectionTitle('Qualification', _primaryColor),
+            _buildSectionTitle('Qualification', primaryColor),
             _buildSectionContent(candidate.qualification),
-            
-            _buildSectionTitle('Experience', _primaryColor),
+
+            _buildSectionTitle('Experience', primaryColor),
             _buildSectionContent('${candidate.experience} years'),
-            
-            _buildSectionTitle('Skills', _primaryColor),
-            _buildSectionContent(candidate.skills.join(', ')), // Display skills as a comma-separated string
-            
-            _buildSectionTitle('Achievements', _primaryColor),
-            ...candidate.achievements.map((ach) => _buildListItem(ach)).toList(), // Display achievements as a bulleted list
-            
+
+            _buildSectionTitle('Skills', primaryColor),
+            _buildSectionContent(candidate.skills
+                .join(', ')), // Display skills as a comma-separated string
+
+            _buildSectionTitle('Achievements', primaryColor),
+            ...candidate.achievements.map((ach) =>
+                _buildListItem(ach)), // Display achievements as a bulleted list
+
             SizedBox(height: 40),
 
             // --- Action Buttons ---
@@ -113,24 +119,27 @@ class ResumeDetailScreen extends StatelessWidget {
   Widget _buildSectionTitle(String title, Color color) {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),
-      child: Text(title.toUpperCase(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: color)),
+      child: Text(title.toUpperCase(),
+          style: TextStyle(
+              fontSize: 16, fontWeight: FontWeight.bold, color: color)),
     );
   }
-  
+
   Widget _buildSectionContent(String content) {
     return Padding(
       padding: const EdgeInsets.only(top: 4.0, bottom: 8.0),
       child: Text(content, style: TextStyle(fontSize: 16)),
     );
   }
-  
+
   Widget _buildListItem(String content) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('• ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text('• ',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           Expanded(child: Text(content, style: TextStyle(fontSize: 16))),
         ],
       ),
