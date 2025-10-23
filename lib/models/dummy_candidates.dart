@@ -26,36 +26,103 @@ class Candidate {
 
 // A list of 100 dummy candidates for blue-collar jobs
 final List<Candidate> dummyCandidates = List.generate(100, (index) {
-  final jobProfiles = ['Driver', 'Electrician', 'Plumber', 'Cook', 'Security Guard', 'Welder', 'Carpenter', 'Mechanic'];
-  final names = ['Rohan Sharma', 'Priya Singh', 'Amit Kumar', 'Sneha Patel', 'Vijay Yadav', 'Anjali Gupta', 'Suresh Reddy', 'Meera Desai'];
-  final locations = ['Mumbai', 'Delhi', 'Bangalore', 'Rourkela', 'Kolkata', 'Chennai', 'Hyderabad', 'Pune'];
-  final qualifications = ['10th Pass', '12th Pass', 'ITI Certified', 'Diploma in Engineering'];
-  
+  final jobProfiles = [
+    'Driver',
+    'Electrician',
+    'Plumber',
+    'Cook',
+    'Security Guard',
+    'Welder',
+    'Carpenter',
+    'Mechanic'
+  ];
+  final names = [
+    'Rohan Sharma',
+    'Priya Singh',
+    'Amit Kumar',
+    'Sneha Patel',
+    'Vijay Yadav',
+    'Anjali Gupta',
+    'Suresh Reddy',
+    'Meera Desai'
+  ];
+  final locations = [
+    'Mumbai',
+    'Delhi',
+    'Bangalore',
+    'Rourkela',
+    'Kolkata',
+    'Chennai',
+    'Hyderabad',
+    'Pune'
+  ];
+  final qualifications = [
+    '10th Pass',
+    '12th Pass',
+    'ITI Certified',
+    'Diploma in Engineering'
+  ];
+
   final job = jobProfiles[index % jobProfiles.length];
-  
+
   List<String> skills = [];
   List<String> achievements = [];
 
   switch (job) {
     case 'Driver':
-      skills = ['Commercial Driving (CDL)', 'Route Navigation', 'Vehicle Maintenance', 'Defensive Driving'];
-      achievements = ['Maintained a 99% on-time delivery record over 3 years.', 'Awarded "Driver of the Month" twice for safety and efficiency.'];
+      skills = [
+        'Commercial Driving (CDL)',
+        'Route Navigation',
+        'Vehicle Maintenance',
+        'Defensive Driving'
+      ];
+      achievements = [
+        'Maintained a 99% on-time delivery record over 3 years.',
+        'Awarded "Driver of the Month" twice for safety and efficiency.'
+      ];
       break;
     case 'Electrician':
-      skills = ['Wiring & Installation', 'Troubleshooting', 'Circuit Breakers', 'Safety Compliance'];
-      achievements = ['Successfully completed wiring for 3 new commercial buildings.', 'Reduced electrical faults by 25% through proactive maintenance.'];
+      skills = [
+        'Wiring & Installation',
+        'Troubleshooting',
+        'Circuit Breakers',
+        'Safety Compliance'
+      ];
+      achievements = [
+        'Successfully completed wiring for 3 new commercial buildings.',
+        'Reduced electrical faults by 25% through proactive maintenance.'
+      ];
       break;
     case 'Plumber':
-      skills = ['Pipe Fitting', 'Drainage Systems', 'Fixture Installation', 'Leak Repair'];
-      achievements = ['Resolved over 500+ residential plumbing issues.', 'Praised for quick and effective emergency repair services.'];
+      skills = [
+        'Pipe Fitting',
+        'Drainage Systems',
+        'Fixture Installation',
+        'Leak Repair'
+      ];
+      achievements = [
+        'Resolved over 500+ residential plumbing issues.',
+        'Praised for quick and effective emergency repair services.'
+      ];
       break;
     case 'Cook':
-        skills = ['Indian Cuisine', 'Food Safety (FSSAI)', 'Kitchen Management', 'Menu Planning'];
-        achievements = ['Head Cook at a restaurant serving 100+ customers daily.', 'Improved kitchen efficiency by 20%.'];
-        break;
+      skills = [
+        'Indian Cuisine',
+        'Food Safety (FSSAI)',
+        'Kitchen Management',
+        'Menu Planning'
+      ];
+      achievements = [
+        'Head Cook at a restaurant serving 100+ customers daily.',
+        'Improved kitchen efficiency by 20%.'
+      ];
+      break;
     default:
       skills = ['General Maintenance', 'Safety Procedures', 'Teamwork'];
-      achievements = ['Consistently met project deadlines.', 'Received positive feedback from supervisors.'];
+      achievements = [
+        'Consistently met project deadlines.',
+        'Received positive feedback from supervisors.'
+      ];
       break;
   }
 
